@@ -31,7 +31,7 @@ export const CONFIG = {
    * Which teammate holds which digit. Shown to nobody — this is for YOUR
    * printout. See docs/RUNBOOK.md.
    */
-  digitHolders: ["Teammate 1", "Teammate 2", "Teammate 3", "Teammate 4"], // TODO: names
+  digitHolders: ["Hadil", "Nathalie", "Raja", "Roy"],
 
   /** Auto-help timings. She must never be stuck in front of an audience. */
   hintAfterMs: 20_000,
@@ -91,7 +91,7 @@ export const TICKETS: Ticket[] = [
   {
     id: "BUG-1042",
     title: "Sleep module returns null since 2019",
-    reporter: "Teammate 1", // TODO: real name
+    reporter: "Hadil",
     severity: "CRITICAL",
     steps: [
       "Have two children",
@@ -107,7 +107,7 @@ export const TICKETS: Ticket[] = [
   {
     id: "BUG-2087",
     title: "User builds furniture instead of resting",
-    reporter: "Teammate 2", // TODO
+    reporter: "Nathalie",
     severity: "P2",
     steps: [
       "Give Jessy a free weekend",
@@ -122,7 +122,7 @@ export const TICKETS: Ticket[] = [
   {
     id: "BUG-3011",
     title: "Tabouleh craving exceeds max integer",
-    reporter: "Teammate 1", // TODO
+    reporter: "Hadil",
     severity: "P1",
     steps: [
       "Mention lunch",
@@ -136,7 +136,7 @@ export const TICKETS: Ticket[] = [
   {
     id: "BUG-4500",
     title: "Sharm el-Sheikh deploys in an infinite loop",
-    reporter: "Teammate 1", // TODO
+    reporter: "Hadil",
     severity: "P3",
     steps: [
       "Book one holiday",
@@ -150,7 +150,7 @@ export const TICKETS: Ticket[] = [
   {
     id: "BUG-5006",
     title: "Excess soap detected in production",
-    reporter: "Teammate 3", // TODO
+    reporter: "Raja",
     severity: "P2",
     steps: [
       "Leave Jessy alone with oils and lye",
@@ -178,7 +178,7 @@ export const TICKETS: Ticket[] = [
   {
     id: "BUG-7033",
     title: "Food renders at unnecessarily high fidelity",
-    reporter: "Teammate 2", // TODO
+    reporter: "Nathalie",
     severity: "P4",
     steps: [
       "Ask Jessy to bring something to the office",
@@ -192,7 +192,7 @@ export const TICKETS: Ticket[] = [
   {
     id: "BUG-8001",
     title: "Unauthorized art project detected in kids' room",
-    reporter: "Teammate 4", // TODO
+    reporter: "Roy",
     severity: "P0",
     steps: [
       "Have an idea at 11pm",
@@ -206,7 +206,7 @@ export const TICKETS: Ticket[] = [
   {
     id: "BUG-9002",
     title: "User requires funds in order to terminate employment",
-    reporter: "Teammate 1", // TODO
+    reporter: "Hadil",
     severity: "CRITICAL",
     steps: [
       "Request raise",
@@ -264,31 +264,37 @@ export interface Tribute {
 
 export const TRIBUTES: Tribute[] = [
   {
-    name: "Teammate 1", // TODO
-    role: "TODO: role",
-    photo: null, // e.g. "/photos/team/one.jpg"
+    name: "Hadil",
+    role: "Developer", // works from Cyprus
+    photo: "/photos/team/hadil.jpg",
     message:
-      "TODO: their message. Keep it to two or three sentences — short ones " +
-      "land harder on a phone screen.",
-  },
-  {
-    name: "Teammate 2",
-    role: "TODO: role",
-    photo: null,
-    message: "TODO: their message.",
-  },
-  {
-    name: "Teammate 3",
-    role: "TODO: role",
-    photo: null,
-    message: "TODO: their message.",
-  },
-  {
-    name: "Teammate 4",
-    role: "TODO: role",
-    photo: null,
-    message: "TODO: their message.",
+      "Miss Pixel " +
+      "Happy anniversary, Jessy!",
     remote: true,
+  },
+  {
+    name: "Nathalie",
+    role: "Developer", // the youngest of the team
+    photo: "/photos/team/nathalie.jpg",
+    message:
+      "Badde ebke :') " +
+      "Happy anniversary!",
+  },
+  {
+    name: "Raja",
+    role: "Developer", // second-youngest
+    photo: "/photos/team/raja.jpg",
+    message:
+      "Kebous bugs " +
+      "Happy anniversary!",
+  },
+  {
+    name: "Roy",
+    role: "Developer",
+    photo: "/photos/team/roy.jpg",
+    message:
+      "From 1 yearS to 10 years.. " +
+      "Happy anniversary!",
   },
 ];
 
