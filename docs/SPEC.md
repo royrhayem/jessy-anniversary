@@ -32,6 +32,23 @@ other material doesn't already provide. Overridable by the organizer.
 - **Gift location:** hidden in the office, or virtual — *to be decided late*
 - **Group:** one office now, outing later
 - **Device:** her own phone, mobile-first (assumed iPhone)
+- **Start year:** **2016** ✅ confirmed → card code `2016`, timeline 2016–2026
+- **Team size:** **5 total** ✅ confirmed → Jessy + **4 teammates**
+
+### Team Culture (observed from team photos)
+Read off the reference photos, these are usable content hooks:
+
+| Observation | Where it shows up |
+|---|---|
+| **This team eats together — constantly.** Steak & fries lunches, shared mezze, dessert courses. Multiple restaurants, multiple seasons. | The tribute timeline; a "meals shared" stat; `BUG-7033` (food plating) |
+| **A giant hamster plush** appears in an office photo, held like a team member | **Easter egg** — see §20.3. Recurring mascot / loading spinner / hidden tap target |
+| **Hybrid team** — one member joins from a laptop on a video call in an office shot | The tribute wall must work for a remote face; `BUG-6120` supports a remote digit-holder |
+| **Selfie culture** — nearly every photo is an arm's-length group selfie | The `/keepsake` page should be framed as *the next selfie in the series* |
+| **Small, tight, informal** — 5 people, no hierarchy visible, lots of physical closeness | Tone stays warm and peer-to-peer, never corporate-formal |
+| **Gift-giving is already a ritual** — a wrapped present sits on the table in one photo | The fake gift card will read as normal to her. **The prank will land.** |
+
+**Jessy** is identified as the teammate with the round dark-framed glasses.
+*Organizer to confirm before any photo is placed in a named slot.*
 
 ---
 
@@ -509,10 +526,23 @@ Each of four teammates holds one printed digit (on the back of their badge, a
 sticky note, a card). She has to turn around and ask her team. The screen shows
 four empty boxes that fill as they call out numbers.
 
+**With a team of 5, this is now exact:** Jessy + 4 teammates = **4 digits, one per
+teammate.** Nobody is a spectator. Every single person in the room has a job, and
+the code cannot be completed without all four of them. This is the strongest
+possible version of this mechanic and it fell out of the team size for free.
+
+Suggested code: **`2016`** — the year she started, which she has *already typed
+once* on the gift card screen. When the fourth digit lands and she recognizes it,
+that's a second, quieter laugh on top of the first.
+
+**Remote teammate:** if the video-call member can't be there in person, their
+digit is delivered by them on screen — the site shows a "waiting for remote
+verification…" state for that one slot, which makes their inclusion the point
+rather than an apology.
+
 **Why this earns its place:** it's the only moment that physically turns her
-toward the room, it scales to any team size (4 digit-holders, everyone else
-watching), it costs nothing, and it takes 45 seconds. It converts spectators into
-participants exactly once — more than that and it drags.
+toward the room, it costs nothing, and it takes 45 seconds. It converts
+spectators into participants exactly once — more than that and it drags.
 
 **Fallback:** after 30s, the code auto-fills with a message —
 `Verified. They were always going to say yes.`
@@ -803,12 +833,17 @@ lands, so development is never blocked on assets.
 
 ## 19. Open Questions
 
+**Resolved**
+1. ~~Her start year~~ → **2016** ✅ (card code + timeline anchor)
+2. ~~Team size~~ → **5 total, 4 teammates** ✅ (exact fit for `BUG-6120`)
+3. ~~Real photos~~ → **5 team photos supplied** ✅ (see §20 for the pipeline)
+
 **Blocking (needed before build starts)**
-1. **Her start year** — I've assumed **2016** and used it as the card code. Confirm.
-2. **Team size** — how many people will be in the room? Drives the tribute wall
-   layout and the `BUG-6120` code length.
-3. **Real photos of Jessy and the team** — do you have any? Real photos beat every
-   AI image in this spec, especially on the tribute wall.
+1. **Photo files committed to the repo** — see §20.1. The images exist but are not
+   yet on disk; nothing can be processed until they are.
+2. **Confirm which person is Jessy** in each photo before any named slot is filled.
+   Getting this wrong in a tribute is unrecoverable.
+3. **Teammate names** for the four ticket-reporter bylines and tribute cards.
 
 **Important (needed before content freeze)**
 4. **Language** — English only, or should some copy be in Arabic? Given tabouleh,
@@ -831,6 +866,98 @@ lands, so development is never blocked on assets.
 11. Can we get **anything from her kids** — a drawing, a voice note, a photo? See
     §15; this is the highest-value optional addition in the whole spec.
 12. **Is there a TV/screen in the room** to mirror her phone to?
+
+---
+
+## 20. Photo Assets & Background Treatment
+
+### 20.1 Getting the photos into the build
+The five reference photos were shared in conversation, **not committed to the
+repo**, so no tooling can touch them yet. To unblock:
+
+```
+public/
+  photos/
+    raw/            ← drop the 5 originals here, any filename
+    team/           ← generated: 4 square teammate portraits
+    jessy/          ← generated: 2–3 portraits of Jessy
+    timeline/       ← generated: wide crops for the tribute scroll
+```
+
+Commit the originals to `public/photos/raw/` and the pipeline below can run.
+
+### 20.2 The background problem — recommended solution
+
+The five photos were taken in four different places under four different lights:
+a dim brick bar, a bright street-side window, a white office, a warm-toned
+restaurant. Dropped onto the tribute wall as-is they will look like a folder of
+snapshots, not a designed page.
+
+**Three options, in order of what I'd actually do:**
+
+**① CSS treatment — recommended. No background removal at all.**
+Circular crop + a warm duotone + a soft ring. Every photo is forced into the same
+two-tone palette (`sand` → `deep`), so the bar, the office, and the street all
+resolve to the same warm wash. Backgrounds stop being backgrounds and become
+texture.
+
+```css
+.portrait {
+  aspect-ratio: 1; border-radius: 50%; object-fit: cover;
+  filter: grayscale(1) contrast(1.08) brightness(1.02);
+  /* duotone via a blend layer in --sand / --deep */
+  box-shadow: 0 0 0 3px var(--sand), 0 0 0 5px var(--terracotta);
+}
+```
+- **Cost:** zero. No external tools, no re-export, no per-photo labor.
+- **Quality:** high — this is how editorial team pages actually solve this.
+- **Bonus:** it *reinforces* the Layer C handmade palette instead of fighting it.
+- **Reversible:** one CSS variable flips the whole treatment.
+
+**② Local background removal (`rembg`), if you want true cut-outs.**
+Once the files are committed I can write `scripts/cutout.py` using `rembg` +
+`Pillow` to produce transparent PNGs, then composite each subject onto the `sand`
+paper texture. This gives clean cut-out portraits floating on the tribute wall.
+- **Cost:** a model download (~180 MB) through the proxy; may or may not be
+  permitted by the network policy — I'd have to try it.
+- **Risk:** hair edges on the curly-haired teammates will need manual cleanup.
+  Auto-matting is unreliable exactly where these photos are hardest.
+
+**③ Do it outside and hand me PNGs.** Apple Photos' "lift subject from
+background" (long-press the person → Copy) takes ~10 seconds per photo on an
+iPhone and beats every automated tool on hair. Drop the results in
+`public/photos/team/` as transparent PNGs and the site consumes them directly.
+
+**My recommendation: ① for v1, ③ if you want to upgrade the four hero portraits.**
+Option ① makes the whole gallery coherent immediately; ③ is a targeted upgrade for
+the four faces that matter most. ② is the one I'd skip — most effort, least
+predictable result.
+
+> **Note on AI background replacement:** I don't have an image generation or
+> editing tool available in this session, and neither would any subagent — they
+> inherit the same toolset. Real edits to these photos have to happen either
+> through a local script (②) or on your side (③).
+
+### 20.3 Easter eggs sourced from the photos
+
+- **The hamster.** The plush from the office photo becomes the site's loading
+  spinner during the fake 3.5s corporate wait — a tiny hamster, spinning. It also
+  hides somewhere on the tribute wall as a tappable secret that plays a single
+  squeak. Nobody will expect the team mascot to show up inside a gift card portal.
+- **The wrapped gift on the table.** Reuse that exact photo on `/gift` as the
+  "before" state of the reveal.
+- **The video-call laptop.** On the tribute wall, the remote teammate's card is
+  framed as a video-call window rather than a polaroid. Their difference becomes
+  a design detail instead of an omission.
+- **The dessert plate.** `BUG-7033` ("food renders at unnecessarily high
+  fidelity") uses a real photo from one of these dinners, not an AI render.
+
+### 20.4 Privacy
+These are photographs of real colleagues going onto a public URL. Mitigations:
+`noindex` / `nofollow` / `X-Robots-Tag` (already specified in §12), a non-guessable
+URL, and the site taken down after the event. **Ask the other four before their
+faces ship** — it takes one message and avoids the one complaint this project
+could plausibly generate.
 
 ---
 
