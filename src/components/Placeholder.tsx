@@ -50,14 +50,9 @@ export default function Placeholder({
 /** Warmed during the landing spinner so nothing waits on office wifi later. */
 export const PLACEHOLDER_IMAGES = [
   "/corporate-hero.jpg",
-  "/ticket-sleep.png",
-  "/ticket-furniture.png",
-  "/ticket-tabouleh.png",
   "/ticket-soap.png",
   "/ticket-raise.png",
   "/tribute-bg.jpg",
-  "/sharm-sunset.jpg",
   "/soap-flatlay.jpg",
   "/kids-drawing.png",
-  "/plated-food.jpg",
 ];

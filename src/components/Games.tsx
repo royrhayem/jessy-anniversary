@@ -6,7 +6,7 @@ import { haptic } from "@/lib/progress";
 import Placeholder from "./Placeholder";
 
 /**
- * Ten micro-interactions. Rules for every one of them:
+ * Four micro-interactions are used by the board. Rules for every one of them:
  *   - one thumb, portrait, under 60 seconds
  *   - no text input, no failure state, nothing can be answered "wrong"
  *   - `solved` is forced true by the parent on auto-solve, so every game must
@@ -22,13 +22,8 @@ export default function Game({
   ...props
 }: GameProps & { kind: GameKind }) {
   switch (kind) {
-    case "sleep": return <Sleep {...props} />;
-    case "furniture": return <Furniture {...props} />;
-    case "tabouleh": return <Tabouleh {...props} />;
-    case "sharm": return <Sharm {...props} />;
     case "bubbles": return <Bubbles {...props} />;
     case "teamcode": return <TeamCode {...props} />;
-    case "plating": return <Plating {...props} />;
     case "scratch": return <Scratch {...props} />;
     case "raise": return <Raise {...props} />;
     case "final": return <Final {...props} />;
@@ -37,209 +32,6 @@ export default function Game({
 
 const panel =
   "rounded-md border border-dbg-line bg-dbg-bg p-4 flex flex-col items-center gap-4";
-
-/* -------------------------------------------------------------------------
- *  BUG-1042 — Sleep. Unwinnable by design; that IS the joke.
- * ---------------------------------------------------------------------- */
-function Sleep({ solved, onSolve }: GameProps) {
-  const [fill, setFill] = useState(0);
-  const [taps, setTaps] = useState(0);
-  const [thief, setThief] = useState<string | null>(null);
-
-  // Whatever she builds up, the kids take back.
-  useEffect(() => {
-    if (solved) return;
-    const id = setInterval(() => setFill((f) => Math.max(0, f - 4)), 120);
-    return () => clearInterval(id);
-  }, [solved]);
-
-  useEffect(() => {
-    if (fill < 70 || solved) return;
-    setThief(Math.random() > 0.5 ? "👶" : "🧒");
-    setFill(0);
-    haptic([30, 50, 30]);
-    const t = setTimeout(() => setThief(null), 900);
-    return () => clearTimeout(t);
-  }, [fill, solved]);
-
-  // After enough attempts the site concedes on her behalf.
-  useEffect(() => {
-    if (taps >= 12 && !solved) onSolve();
-  }, [taps, solved, onSolve]);
-
-  return (
-    <div className={panel}>
-      <p className="text-xs text-dbg-muted font-mono">sleep.restore()</p>
-
-      <div className="relative w-full h-8 bg-dbg-line rounded-full overflow-hidden">
-        <div
-          className="h-full bg-dbg-purple transition-[width] duration-100"
-          style={{ width: `${solved ? 0 : fill}%` }}
-        />
-        {thief && (
-          <span className="absolute inset-0 grid place-items-center text-xl animate-bounce">
-            {thief}
-          </span>
-        )}
-      </div>
-
-      {solved ? (
-        <p className="text-dbg-amber text-sm text-center font-mono">
-          Sleep cannot be restored.
-        </p>
-      ) : (
-        <button
-          onClick={() => {
-            setFill((f) => Math.min(100, f + 14));
-            setTaps((t) => t + 1);
-            haptic(8);
-          }}
-          className="w-full border-2 border-dbg-purple text-dbg-purple font-mono py-3.5 min-h-12 active:bg-dbg-purple/10"
-        >
-          RESTORE SLEEP
-        </button>
-      )}
-    </div>
-  );
-}
-
-/* -------------------------------------------------------------------------
- *  BUG-2087 — Furniture. Tap three parts to assemble.
- * ---------------------------------------------------------------------- */
-function Furniture({ solved, onSolve }: GameProps) {
-  const [placed, setPlaced] = useState<number[]>([]);
-  const parts = ["Tabletop", "Leg A", "Leg B"];
-
-  useEffect(() => {
-    if (placed.length === parts.length && !solved) onSolve();
-  }, [placed, solved, onSolve, parts.length]);
-
-  const done = solved || placed.length === parts.length;
-
-  return (
-    <div className={panel}>
-      <p className="text-xs text-dbg-muted font-mono">assemble()</p>
-
-      <div className="relative h-28 w-full grid place-items-center">
-        {done ? (
-          <span className="text-5xl">🪵</span>
-        ) : (
-          <div className="flex flex-col items-center gap-1">
-            <span
-              className={`text-3xl transition-opacity ${placed.includes(0) ? "opacity-100" : "opacity-20"}`}
-            >
-              ▬▬▬
-            </span>
-            <span className="flex gap-8 text-2xl">
-              <i className={placed.includes(1) ? "opacity-100" : "opacity-20"}>▮</i>
-              <i className={placed.includes(2) ? "opacity-100" : "opacity-20"}>▮</i>
-            </span>
-          </div>
-        )}
-      </div>
-
-      {done ? (
-        <p className="text-dbg-green text-sm font-mono">Structurally sound.</p>
-      ) : (
-        <div className="grid grid-cols-3 gap-2 w-full">
-          {parts.map((p, i) => (
-            <button
-              key={p}
-              disabled={placed.includes(i)}
-              onClick={() => {
-                setPlaced((s) => [...s, i]);
-                haptic(12);
-              }}
-              className="border border-dbg-line rounded py-3 min-h-12 text-[11px] font-mono disabled:opacity-30 active:border-dbg-green"
-            >
-              {p}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-/* -------------------------------------------------------------------------
- *  BUG-3011 — Tabouleh. Tap the parsley five times.
- * ---------------------------------------------------------------------- */
-function Tabouleh({ solved, onSolve }: GameProps) {
-  const [n, setN] = useState(0);
-  useEffect(() => {
-    if (n >= 5 && !solved) onSolve();
-  }, [n, solved, onSolve]);
-
-  const done = solved || n >= 5;
-
-  return (
-    <div className={panel}>
-      <p className="text-xs text-dbg-muted font-mono">
-        parsley: {done ? "MAX_INT" : n}/5
-      </p>
-
-      <div className="h-28 w-full grid place-items-center text-5xl">
-        {done ? "🥗" : "🥣"}
-      </div>
-
-      {done ? (
-        <p className="text-dbg-green text-sm font-mono">Overflow. As expected.</p>
-      ) : (
-        <button
-          onClick={() => {
-            setN((v) => v + 1);
-            haptic(10);
-          }}
-          className="w-full border-2 border-dbg-green text-dbg-green font-mono py-3.5 min-h-12 active:bg-dbg-green/10"
-        >
-          🌿 ADD PARSLEY
-        </button>
-      )}
-    </div>
-  );
-}
-
-/* -------------------------------------------------------------------------
- *  BUG-4500 — Sharm. Swipe through the loop; the counter never resets.
- * ---------------------------------------------------------------------- */
-function Sharm({ solved, onSolve }: GameProps) {
-  const [i, setI] = useState(0);
-  useEffect(() => {
-    if (i >= 4 && !solved) onSolve();
-  }, [i, solved, onSolve]);
-
-  const done = solved || i >= 4;
-
-  return (
-    <div className={panel}>
-      <p className="text-xs text-dbg-muted font-mono">
-        deploy #{done ? "∞" : i + 1} → sharm-el-sheikh
-      </p>
-
-      <Placeholder
-        src="/sharm-sunset.jpg"
-        label="Red Sea at golden hour — see SPEC §18 #9"
-        className="w-full h-32 rounded"
-      />
-
-      {done ? (
-        <p className="text-dbg-green text-sm font-mono text-center">
-          Loop is intentional.
-        </p>
-      ) : (
-        <button
-          onClick={() => {
-            setI((v) => v + 1);
-            haptic(10);
-          }}
-          className="w-full border-2 border-dbg-green text-dbg-green font-mono py-3.5 min-h-12 active:bg-dbg-green/10"
-        >
-          GOTO 1 →
-        </button>
-      )}
-    </div>
-  );
-}
 
 /* -------------------------------------------------------------------------
  *  BUG-5006 — Bubbles. Pop eight to spell a word.
@@ -368,55 +160,6 @@ function TeamCode({ solved, onSolve }: GameProps) {
         <p className="text-dbg-green text-sm font-mono text-center">
           They were always going to say yes.
         </p>
-      )}
-    </div>
-  );
-}
-
-/* -------------------------------------------------------------------------
- *  BUG-7033 — Plating. Scores 10/10 regardless. Obviously.
- * ---------------------------------------------------------------------- */
-function Plating({ solved, onSolve }: GameProps) {
-  const [on, setOn] = useState<number[]>([]);
-  const items = ["🍋", "🌿", "🫒"];
-
-  useEffect(() => {
-    if (on.length === items.length && !solved) onSolve();
-  }, [on, solved, onSolve, items.length]);
-
-  const done = solved || on.length === items.length;
-
-  return (
-    <div className={panel}>
-      <p className="text-xs text-dbg-muted font-mono">render(quality: .excessive)</p>
-
-      <div className="relative h-28 w-28 rounded-full border-2 border-dbg-line grid place-items-center">
-        <span className="text-3xl">🍽️</span>
-        <span className="absolute inset-0 grid place-items-center text-2xl">
-          {(done ? items : on.map((i) => items[i])).join(" ")}
-        </span>
-      </div>
-
-      {done ? (
-        <p className="text-dbg-green text-sm font-mono">
-          10/10 — it was always going to be 10/10.
-        </p>
-      ) : (
-        <div className="grid grid-cols-3 gap-2 w-full">
-          {items.map((it, i) => (
-            <button
-              key={it}
-              disabled={on.includes(i)}
-              onClick={() => {
-                setOn((s) => [...s, i]);
-                haptic(12);
-              }}
-              className="border border-dbg-line rounded py-3 min-h-12 text-xl disabled:opacity-30 active:border-dbg-green"
-            >
-              {it}
-            </button>
-          ))}
-        </div>
       )}
     </div>
   );

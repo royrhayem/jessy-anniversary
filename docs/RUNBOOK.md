@@ -79,7 +79,7 @@ Open **`/presenter` on your own phone** before the event. It gives you:
 
 - jump to any screen
 - reset her progress
-- close nine tickets instantly (if you need to skip to the ending)
+- close four tickets instantly (if you need to skip to the ending)
 - a cheat sheet of both codes, who holds which digit, and the gift location
 
 Not linked from anywhere in the experience.
@@ -94,7 +94,7 @@ Not linked from anywhere in the experience.
 | I | Code entry | ~30s |
 | I | Balance gag | ~60s |
 | II | Crash / role flip | ~35s |
-| II | Nine tickets | ~4 min |
+| II | Four tickets + final reveal | ~2 min |
 | III | Tribute scroll | ~90s |
 | III | Gift reveal | ~30s |
 

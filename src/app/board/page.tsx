@@ -10,7 +10,7 @@ export default function Board() {
   const router = useRouter();
   const { isClosed, allButFinalClosed, ready, closed } = useProgress();
 
-  // Nine down, one to go — the board's job is finished.
+  // Four playable tickets down, one to go — the board's job is finished.
   useEffect(() => {
     if (isClosed("BUG-0001")) router.replace("/tribute");
   }, [closed, isClosed, router]);

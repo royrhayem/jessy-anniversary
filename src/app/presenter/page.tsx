@@ -66,7 +66,7 @@ export default function Presenter() {
             }
             className="flex-1 rounded border border-dbg-amber text-dbg-amber font-mono py-3 min-h-12 text-xs"
           >
-            CLOSE 9
+            CLOSE 4
           </button>
         </div>
       </section>

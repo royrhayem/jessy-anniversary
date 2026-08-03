@@ -3,9 +3,11 @@
 import {
   createContext, useCallback, useContext, useEffect, useMemo, useState,
 } from "react";
-import type { TicketId } from "@/content";
+import { TICKETS, type TicketId } from "@/content";
 
-const KEY = "jessy10.progress.v1";
+// The ticket set is intentionally shorter than the original ten-ticket flow.
+// Bump the key so an old run cannot leave removed tickets marked as closed.
+const KEY = "jessy10.progress.v2";
 
 interface ProgressState {
   closed: TicketId[];
@@ -18,15 +20,15 @@ interface ProgressApi extends ProgressState {
   close: (id: TicketId) => void;
   reset: () => void;
   setSound: (on: boolean) => void;
-  /** All tickets except BUG-0001. */
+  /** All playable tickets except BUG-0001. */
   openCount: number;
   allButFinalClosed: boolean;
 }
 
 const Ctx = createContext<ProgressApi | null>(null);
 
-/** BUG-0001 is excluded — it unlocks only once the other nine are closed. */
-const NORMAL_TICKET_COUNT = 9;
+/** BUG-0001 is excluded — it unlocks only once the four playable tickets close. */
+const NORMAL_TICKET_COUNT = TICKETS.filter((ticket) => ticket.id !== "BUG-0001").length;
 
 export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<ProgressState>({ closed: [], soundOn: false });

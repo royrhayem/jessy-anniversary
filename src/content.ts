@@ -68,12 +68,10 @@ export const BALANCES = [
  * ------------------------------------------------------------------------- */
 
 export type TicketId =
-  | "BUG-1042" | "BUG-2087" | "BUG-3011" | "BUG-4500" | "BUG-5006"
-  | "BUG-6120" | "BUG-7033" | "BUG-8001" | "BUG-9002" | "BUG-0001";
+  | "BUG-5006" | "BUG-6120" | "BUG-8001" | "BUG-9002" | "BUG-0001";
 
 export type GameKind =
-  | "sleep" | "furniture" | "tabouleh" | "sharm" | "bubbles"
-  | "teamcode" | "plating" | "scratch" | "raise" | "final";
+  | "bubbles" | "teamcode" | "scratch" | "raise" | "final";
 
 export interface Ticket {
   id: TicketId;
@@ -87,66 +85,8 @@ export interface Ticket {
   closingNote: string;
 }
 
+/** Four playable tickets, followed by the locked appreciation reveal. */
 export const TICKETS: Ticket[] = [
-  {
-    id: "BUG-1042",
-    title: "Sleep module returns null since 2019",
-    reporter: "Hadil",
-    severity: "CRITICAL",
-    steps: [
-      "Have two children",
-      "Attempt to sleep",
-      "Observe: null",
-    ],
-    game: "sleep",
-    resolution: "WONTFIX",
-    closingNote:
-      "Reproduced consistently for six years. Cannot be fixed at this time. " +
-      "Closing as WONTFIX with enormous respect.",
-  },
-  {
-    id: "BUG-2087",
-    title: "User builds furniture instead of resting",
-    reporter: "Nathalie",
-    severity: "P2",
-    steps: [
-      "Give Jessy a free weekend",
-      "Return on Monday",
-      "There is now a coffee table",
-    ],
-    game: "furniture",
-    resolution: "FIXED",
-    closingNote:
-      "Table assembled. Structurally sound. Better than anything we could buy.",
-  },
-  {
-    id: "BUG-3011",
-    title: "Tabouleh craving exceeds max integer",
-    reporter: "Hadil",
-    severity: "P1",
-    steps: [
-      "Mention lunch",
-      "Wait approximately 0.3 seconds",
-      "Integer overflow",
-    ],
-    game: "tabouleh",
-    resolution: "BY DESIGN",
-    closingNote: "Working as intended. Do not patch.",
-  },
-  {
-    id: "BUG-4500",
-    title: "Sharm el-Sheikh deploys in an infinite loop",
-    reporter: "Hadil",
-    severity: "P3",
-    steps: [
-      "Book one holiday",
-      "Enjoy it",
-      "GOTO 1",
-    ],
-    game: "sharm",
-    resolution: "NOT A BUG",
-    closingNote: "Loop is intentional. Recommend increasing iteration count.",
-  },
   {
     id: "BUG-5006",
     title: "Excess soap detected in production",
@@ -174,20 +114,6 @@ export const TICKETS: Ticket[] = [
     game: "teamcode",
     resolution: "VERIFIED",
     closingNote: "Team confirmed. All four of them. Loudly.",
-  },
-  {
-    id: "BUG-7033",
-    title: "Food renders at unnecessarily high fidelity",
-    reporter: "Nathalie",
-    severity: "P4",
-    steps: [
-      "Ask Jessy to bring something to the office",
-      "Receive a plated composition",
-      "Feel bad about your own lunch",
-    ],
-    game: "plating",
-    resolution: "WORKS AS INTENDED",
-    closingNote: "10/10. It was always going to be 10/10.",
   },
   {
     id: "BUG-8001",

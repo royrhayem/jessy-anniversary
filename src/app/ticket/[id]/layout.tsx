@@ -1,6 +1,6 @@
 import { TICKETS } from "@/content";
 
-/** Prerender all ten tickets — nothing should be server-rendered on the day. */
+/** Prerender the five tickets — nothing should be server-rendered on the day. */
 export function generateStaticParams() {
   return TICKETS.map((t) => ({ id: t.id }));
 }

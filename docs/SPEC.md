@@ -96,8 +96,9 @@ And then the crash log addresses her by name.
 > `...`
 > `Correction: one is currently holding this phone.`
 
-The site hands her a **bug tracker with 10 open tickets** — one per year — each
-one filed by a real teammate, each one a joke about her. Closing them restores
+The site hands her a **bug tracker with four open tickets** — the strongest
+moments from the decade — each one filed by a real teammate, each one a joke
+about her. Closing them restores
 the portal. The final ticket cannot be closed by any button. Closing it reveals
 the real gift.
 
@@ -125,16 +126,16 @@ the real gift.
 | 4 | **Balance: $0.00** → 3 EGP → 1 bar of soap | 1:00 | Betrayal / laughter | **Big laugh** |
 | 5 | Portal crashes. Stack trace. | 1:30 | Delight — she knows this screen | Confusion → intrigue |
 | 6 | Site recognizes her as QA. Role flip. | 1:50 | Recognition, ego-stroke | "Ohhhh" |
-| 7 | **10 open tickets appear** | 2:10 | Amusement | Everyone reads along |
-| 8 | Closes tickets 1–3 (mini-interactions) | 2:30–5:30 | Play | **Shouting answers** |
-| 9 | One ticket requires the room (team code) | 5:30 | Collective | **Active participation** |
-| 10 | All tickets closed but one: `BUG-0001` | 6:30 | Shift in tone | Quiet |
-| 11 | `BUG-0001: CANNOT REPRODUCE` → tribute wall | 7:00 | **Emotional** | Silence, phones up |
-| 12 | Portal "repairs" itself into something handmade | 8:00 | Warmth | Applause |
-| 13 | Real gift location revealed. Bubbles. | 8:30 | Joy | Cheering |
-| 14 | Shareable card / keepsake page | 9:00 | Keepsake | Photos |
+| 7 | **4 open tickets appear** | 2:10 | Amusement | Everyone reads along |
+| 8 | Closes the four mini-interactions | 2:30–4:30 | Play | **Shouting answers** |
+| 9 | One ticket requires the room (team code) | 3:30 | Collective | **Active participation** |
+| 10 | All tickets closed but one: `BUG-0001` | 4:30 | Shift in tone | Quiet |
+| 11 | `BUG-0001: CANNOT REPRODUCE` → tribute wall | 5:00 | **Emotional** | Silence, phones up |
+| 12 | Portal "repairs" itself into something handmade | 6:00 | Warmth | Applause |
+| 13 | Real gift location revealed. Bubbles. | 6:30 | Joy | Cheering |
+| 14 | Shareable card / keepsake page | 7:00 | Keepsake | Photos |
 
-**Total: ~9 minutes**, with every step skippable, targeting the 5–10 min window.
+**Total: ~7 minutes**, with every step skippable, targeting the 5–10 min window.
 
 ---
 
@@ -160,13 +161,14 @@ FATAL
 The crash reveals a second layer beneath the corporate skin: a dark, technical,
 honest interface. It knows exactly who she is. It has been waiting for her.
 
-It presents `JESSY-10Y`, a bug board with ten tickets — the last decade,
-filed as defects. Every ticket is a love letter disguised as a complaint.
+It presents `JESSY-10Y`, a bug board with four tickets — the strongest jokes
+from the decade, filed as defects. Every ticket is a love letter disguised as a
+complaint.
 
 She triages them. The room reads them out loud.
 
 ### Act III — The Truth (6:30–9:00)
-Nine tickets close. `BUG-0001` will not. She marks it `CANNOT REPRODUCE` —
+Four tickets close. `BUG-0001` will not. She marks it `CANNOT REPRODUCE` —
 the QA verdict for a problem that isn't real — and the interface finally drops
 the act. The cold portal dissolves into something warm, textured, and handmade:
 paper, sea, soap. The team's real words. Ten years, and then the gift.
@@ -180,15 +182,10 @@ paper, sea, soap. The team's real words. Ten years, and then the gift.
   /redeem             Code entry (code printed on physical card)
   /balance            Escalating balance failure → crash
   /crash              Stack trace + role flip (auto-advances)
-/board                Bug board — 10 tickets, progress persisted
+/board                Bug board — 4 playable tickets + final reveal, progress persisted
   /ticket/[id]        Individual ticket + micro-interaction
-     BUG-1042         Sleep module
-     BUG-2087         Furniture build
-     BUG-3011         Tabouleh overflow
-     BUG-4500         Sharm redeploy loop
      BUG-5006         Soap / bubble pop
      BUG-6120         Team code  ← requires the room
-     BUG-7033         Food plating
      BUG-8001         Kids' art project
      BUG-9002         "Needs money to stop working" → WONTFIX
      BUG-0001         ← cannot be closed
@@ -199,9 +196,9 @@ paper, sea, soap. The team's real words. Ten years, and then the gift.
 /_presenter           Hidden: skip-to-any-step control for the organizer
 ```
 
-**Progression:** sequential through Acts I and III; **tickets 1–9 are closable in
-any order** (parallel) so the room can pick favorites and the pace stays in her
-control. `BUG-0001` unlocks only when the other nine are closed.
+**Progression:** sequential through Acts I and III; the four playable tickets are
+closable in any order (parallel) so the room can pick favorites and the pace
+stays in her control. `BUG-0001` unlocks only when the other four are closed.
 
 ---
 
@@ -500,17 +497,12 @@ A hidden route for you, on your own phone:
 
 ## 10. Game Mechanics
 
-### The ten tickets
+### The four playable tickets and final reveal
 
 | ID | Title | Interaction | Resolution |
 |---|---|---|---|
-| `BUG-1042` | Sleep module returns null since 2019 | **Tap to restore sleep** — bar fills, two tiny avatars pop up and drain it. Unwinnable by design. | `WONTFIX` |
-| `BUG-2087` | User builds furniture instead of resting | **Drag 3 pieces** together to assemble a coffee table | `FIXED` |
-| `BUG-3011` | Tabouleh craving exceeds max integer | **Tap the parsley** — 5 taps, ingredients fly into a bowl | `BY DESIGN` |
-| `BUG-4500` | Sharm el-Sheikh deploys in an infinite loop | **Swipe** through 4 beach photos; each swipe increments a deploy counter | `NOT A BUG` |
 | `BUG-5006` | Excess soap detected in production | **Pop the bubbles** — 8 bubbles, each pops to reveal a letter spelling a word | `FIXED` |
 | `BUG-6120` | Cannot verify user's team | **The room** — a 4-digit code the team shouts (see below) | `VERIFIED` |
-| `BUG-7033` | Food renders at unnecessarily high fidelity | **Plate it** — drag 3 elements onto a plate; it scores itself 10/10 regardless | `WORKS AS INTENDED` |
 | `BUG-8001` | Unauthorized art project detected in kids' room | **Scratch to reveal** a child's crayon drawing | `APPROVED` |
 | `BUG-9002` | User requires funds to terminate employment | **Tap "Approve Raise"** — button dodges her finger 3×, then submits, then returns `403 Forbidden` | `WONTFIX` 😈 |
 | `BUG-0001` | *[redacted until all others close]* | **No button works.** Only one resolution is selectable. | `CANNOT REPRODUCE` |
@@ -564,11 +556,11 @@ PHYSICAL CARD  ──▶  code 2016  ──▶  /redeem unlocked
                                     Acts I → crash (linear, unskippable)
                                           │
                                           ▼
-                                    BUG BOARD (9 tickets, PARALLEL)
-                                    ├── 8 solo micro-interactions
+                                    BUG BOARD (4 tickets, PARALLEL)
+                                    ├── 3 solo micro-interactions
                                     └── BUG-6120 requires 4 teammates ◀── PHYSICAL
                                           │
-                                    all 9 closed
+                                    all 4 closed
                                           ▼
                                     BUG-0001 unlocks (LINEAR)
                                           ▼
@@ -647,7 +639,7 @@ export const CONFIG = {
   teamCode: ["7","2","0","3"],
 };
 
-export const TICKETS: Ticket[] = [ /* 10 tickets */ ];
+export const TICKETS: Ticket[] = [ /* 4 playable + final reveal */ ];
 export const TRIBUTES: Tribute[] = [
   { name: "", role: "", photo: "/team/x.jpg", message: "" },
 ];
@@ -666,11 +658,11 @@ export const STATS = [
 | Layer | Choice | Why |
 |---|---|---|
 | Framework | **Next.js 15 (App Router)** | Vercel-native, zero-config deploy, static export |
-| Language | **TypeScript** | Content model safety across 10 tickets |
+| Language | **TypeScript** | Content model safety across the ticket set |
 | Styling | **Tailwind CSS v4** | Three distinct design layers via CSS custom properties |
 | Animation | **Motion (Framer Motion)** | Layout animations, stagger, `useReducedMotion` built in |
 | Bubbles/particles | **Custom canvas** (~60 lines) | A physics lib is 40 KB for eight bubbles |
-| Gestures | **@use-gesture/react** | Drag interactions in tickets 2 and 7 |
+| Gestures | **@use-gesture/react** | Reserved for future drag interactions |
 | Fonts | Self-hosted **Fraunces**, **JetBrains Mono**, **Caveat** | No runtime third-party fetch |
 | State | React Context + `localStorage` | No Redux/Zustand needed for this |
 | Haptics | `navigator.vibrate` + iOS fallback | Free delight |
@@ -780,49 +772,30 @@ into an image model.
    clip-art style, white background"*
 
 ### Act II — Ticket illustrations (Xcode-dark, minimal)
-3. **`/ticket-sleep.png`** — *"Minimal line illustration on near-black background,
-   neon green thin strokes, a crescent moon with a low-battery icon inside it, two
-   tiny stick-figure children pulling at the moon, technical schematic style,
-   monospace aesthetic, square"*
-4. **`/ticket-furniture.png`** — *"Minimal exploded-view technical blueprint of a
-   wooden coffee table, thin cyan lines on near-black, IKEA-instruction aesthetic,
-   numbered parts, square"*
-5. **`/ticket-tabouleh.png`** — *"Minimal line illustration, bowl of tabouleh
-   viewed from above, parsley tomato bulgur, thin green strokes on near-black,
-   technical schematic style with tiny callout labels, square"*
-6. **`/ticket-soap.png`** — *"Minimal line illustration of a rounded handmade soap
+3. **`/ticket-soap.png`** — *"Minimal line illustration of a rounded handmade soap
    bar with dried lavender embedded, thin lavender strokes on near-black, floating
    bubbles around it, technical schematic aesthetic, square"*
-7. **`/ticket-raise.png`** — *"Minimal line illustration of a bank vault door
+4. **`/ticket-raise.png`** — *"Minimal line illustration of a bank vault door
    sealed shut with a small '403' plate on it, thin red strokes on near-black,
    technical schematic style, square"*
 
 ### Act III — Handmade / warm
-8. **`/tribute-bg.jpg`** — *"Soft handmade paper texture, warm sand cream color
+5. **`/tribute-bg.jpg`** — *"Soft handmade paper texture, warm sand cream color
    #F5E9D7, subtle deckled fibers, gentle natural side lighting, extremely
    minimal, seamless, high resolution"*
-9. **`/sharm-sunset.jpg`** — *"Red Sea coastline at golden hour, calm turquoise
-   shallow water, warm sand, distant mountains in soft haze, no people, painterly
-   soft-focus, warm nostalgic film photography, 3:2"*
-10. **`/floating.jpg`** — *"Overhead view of clear turquoise sea water surface with
+6. **`/floating.jpg`** — *"Overhead view of clear turquoise sea water surface with
     gentle ripples and sunlight caustics, no people, serene, warm tones, abstract,
     square"*
-11. **`/soap-flatlay.jpg`** — *"Flat lay of five handmade artisanal soap bars in
+7. **`/soap-flatlay.jpg`** — *"Flat lay of five handmade artisanal soap bars in
     muted terracotta, olive, and cream tones, arranged on warm linen, dried
     lavender sprigs, natural window light, soft shadows, artisan craft photography,
     square"*
-12. **`/craft-table.jpg`** — *"Warm overhead shot of a handmade wooden coffee table
-    in progress, wood shavings, hand tools, warm afternoon light, artisan
-    workshop, cozy, 3:2"*
-13. **`/kids-drawing.png`** — *"Child's crayon drawing on slightly crumpled paper,
+8. **`/kids-drawing.png`** — *"Child's crayon drawing on slightly crumpled paper,
     a family of four holding hands under a big yellow sun, wobbly joyful lines,
     scanned texture, authentic 5-year-old's artwork"*
-14. **`/plated-food.jpg`** — *"Beautifully plated Levantine mezze on a ceramic
-    plate, artful arrangement, tabouleh, warm natural light, overhead, restaurant
-    food photography, warm earthy palette, square"*
 
 ### Keepsake
-15. **`/certificate-bg.png`** — *"Elegant certificate border, thin double-line
+9. **`/certificate-bg.png`** — *"Elegant certificate border, thin double-line
     frame with subtle botanical corner flourishes, warm terracotta and sea-teal
     ink on cream paper texture, letterpress feel, portrait orientation"*
 

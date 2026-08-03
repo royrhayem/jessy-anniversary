@@ -33,7 +33,7 @@ code, or the gift location.
 | `/redeem` | I | Card code entry |
 | `/balance` | I | The escalating balance gag |
 | `/crash` | II | The crash and the role flip |
-| `/board` | II | Bug board — 10 tickets |
+| `/board` | II | Bug board — 4 playable tickets + final reveal |
 | `/ticket/[id]` | II | Ticket + mini-interaction |
 | `/tribute` | III | Stats, timeline, team messages |
 | `/gift` | III | The reveal |
