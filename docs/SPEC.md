@@ -191,7 +191,8 @@ paper, sea, soap. The team's real words. Ten years, and then the gift.
      BUG-0001         ← cannot be closed
 /tribute              The wall — team messages, photos, 10-year timeline
 /gift                 Three-gift delivery — spa QR + two physical hunts
-/voucher/spa          Built-in spa voucher opened by the first QR
+/spa-voucher.pdf      Supplied Skin Avenue voucher opened by the first QR
+/voucher/spa          Styled fallback voucher preview
 /keepsake             Shareable card, "Certificate of 10 Years of Finding What
                       Everyone Else Missed"
 /_presenter           Hidden: skip-to-any-step control for the organizer
@@ -391,10 +392,10 @@ Full-bleed vertical scroll, warm palette, paper texture. Sections:
 │   ○ ○  ○   ○ ○  ○  ○ ○      │  Soap bubbles on every claim
 └─────────────────────────────┘
 ```
-The first step renders a scannable QR that opens `/voucher/spa` by default (or
-`CONFIG.spaVoucherUrl` if a real spa booking URL is available). Steps two and
-three each reveal a clue, then the physical hiding place. Gift progress persists
-locally so a dropped tab does not reset the scavenger hunt.
+The first step renders a scannable QR that opens the supplied `/spa-voucher.pdf`
+by default (or `CONFIG.spaVoucherUrl` if a different voucher URL is needed).
+Steps two and three each reveal a clue, then the physical hiding place. Gift
+progress persists locally so a dropped tab does not reset the scavenger hunt.
 
 ---
 
@@ -630,7 +631,7 @@ she can keep. That's the strongest ending and costs one extra printout.
 // src/content.ts
 export const CONFIG = {
   code: "2016",
-  spaVoucherUrl: null,
+  spaVoucherUrl: "/spa-voucher.pdf",
   teamCode: ["7","2","0","3"],
 };
 

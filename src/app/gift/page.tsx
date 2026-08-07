@@ -60,8 +60,11 @@ export default function Gift() {
   const isDigital = gift.kind === "digital";
   const allDone = completed.length === REDEMPTION_GIFTS.length;
   const voucherUrl = useMemo(() => {
-    if (CONFIG.spaVoucherUrl) return CONFIG.spaVoucherUrl;
-    return origin ? `${origin}/voucher/spa` : "";
+    if (!origin) return "";
+    if (!CONFIG.spaVoucherUrl) return `${origin}/voucher/spa`;
+    return CONFIG.spaVoucherUrl.startsWith("/")
+      ? `${origin}${CONFIG.spaVoucherUrl}`
+      : CONFIG.spaVoucherUrl;
   }, [origin]);
 
   function openStep(index: number) {

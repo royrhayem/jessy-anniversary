@@ -48,11 +48,8 @@ export const CONFIG = {
   hintAfterMs: 20_000,
   autoSolveAfterMs: 45_000,
 
-  /**
-   * Leave this null to use the built-in voucher page. Set it to the spa's
-   * actual booking/voucher URL when you have one; the QR updates itself.
-   */
-  spaVoucherUrl: null as string | null,
+  /** The supplied PDF is served locally so the QR works without a third party. */
+  spaVoucherUrl: "/spa-voucher.pdf" as string | null,
 } as const;
 
 /** Copy and hiding places for the three-part ending. Update these on the day. */
@@ -85,13 +82,15 @@ export const REDEMPTION_GIFTS = [
   },
 ] as const satisfies readonly RedemptionGift[];
 
-/** The page opened by the spa QR when no external voucher URL is configured. */
+/** Details shown on the built-in voucher preview route. */
 export const SPA_VOUCHER = {
-  spaName: "THE SPA RESET",
-  service: "One very deserved spa treatment",
-  recipient: "Jessy",
-  issuedBy: "Your team, who would like you to stop working for an afternoon",
-  finePrint: "Valid for one Jessy. Bug reports are not accepted during treatment.",
+  spaName: "SKIN AVENUE",
+  service: "$75 of your choice",
+  recipient: "Jessy Dahdouh",
+  issuedBy: "From Mobile Team",
+  validUntil: "5 November 2026",
+  contact: "81 50 60 77 | @skinavenueLB",
+  finePrint: "The original voucher PDF is the official version. No bugs during treatment.",
 } as const;
 
 /* ---------------------------------------------------------------------------

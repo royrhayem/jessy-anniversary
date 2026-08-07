@@ -25,13 +25,16 @@ export default function SpaVoucher() {
           <p className="mt-1 font-serif text-3xl text-deep">{SPA_VOUCHER.recipient}</p>
           <p className="mx-auto mt-5 max-w-xs text-sm leading-relaxed text-ink/70">
             {SPA_VOUCHER.issuedBy}
+            <br />
+            Valid until {SPA_VOUCHER.validUntil}
           </p>
 
           <div className="mt-7 rounded-xl border border-sea/25 bg-white/60 p-4 text-left">
             <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-sea">redemption note</p>
             <p className="mt-2 text-sm leading-relaxed text-ink/75">
-              Show this screen to the organiser or add the spa&apos;s booking details
-              to the voucher copy before the event.
+              {SPA_VOUCHER.contact}
+              <br />
+              The original voucher is available as a PDF below.
             </p>
           </div>
 
@@ -43,9 +46,18 @@ export default function SpaVoucher() {
           </p>
         </div>
 
+        <a
+          href="/spa-voucher.pdf"
+          target="_blank"
+          rel="noreferrer"
+          className="mt-5 block rounded-full bg-deep px-6 py-3.5 text-center font-serif text-lg text-sand"
+        >
+          Open original voucher PDF ↗
+        </a>
+
         <Link
           href="/gift"
-          className="mt-5 block text-center text-sm text-sea underline decoration-sea/40 underline-offset-4"
+          className="mt-4 block text-center text-sm text-sea underline decoration-sea/40 underline-offset-4"
         >
           Back to the gift operation →
         </Link>

@@ -38,6 +38,7 @@ locations, voucher copy, or the team code.
 | `/ticket/[id]` | II | Ticket + mini-interaction |
 | `/tribute` | III | Stats, timeline, team messages |
 | `/gift` | III | Three-gift delivery: spa QR + two physical hunts |
-| `/voucher/spa` | III | Built-in spa voucher opened by the QR |
+| `/spa-voucher.pdf` | III | Supplied Skin Avenue voucher opened by the QR |
+| `/voucher/spa` | III | Styled fallback voucher preview |
 | `/keepsake` | III | Certificate |
 | `/presenter` | — | Organiser controls (not linked) |

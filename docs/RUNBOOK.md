@@ -20,7 +20,7 @@ Search for `TODO`.
 | **The final line** | `THE_LINE` ← the one that matters most |
 | **Three gift copy + locations** | `REDEMPTION_GIFTS` |
 | **Spa voucher copy** | `SPA_VOUCHER` |
-| **Spa QR destination** | `CONFIG.spaVoucherUrl` — leave `null` for `/voucher/spa` |
+| **Spa QR destination** | `CONFIG.spaVoucherUrl` — currently `/spa-voucher.pdf` |
 
 ---
 
