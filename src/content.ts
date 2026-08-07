@@ -60,9 +60,9 @@ export const REDEMPTION_GIFTS = [
   {
     key: "spa",
     kind: "digital",
-    label: "DIGITAL / 01",
-    title: "The reward that requires absolutely no walking",
-    teaser: "A spa reset. Because apparently sleep is not self-installing.",
+    label: "REVEAL / 01",
+    title: "Step one: open the mystery file",
+    teaser: "The first delivery is ready. Small, suspiciously deserved, and definitely not cash.",
     clue: "Scan the evidence. Then book an afternoon where nobody can find you.",
   },
   {

@@ -152,7 +152,7 @@ export default function Gift() {
                   <span aria-hidden>{done ? "✓" : unlocked ? "•" : "·"}</span>
                 </span>
                 <span className="mt-1 block text-[11px] leading-tight text-deep">
-                  {item.kind === "digital" ? "spa reset" : `hidden gift ${index}`}
+                  {item.kind === "digital" ? "reveal step 1" : `hidden gift ${index}`}
                 </span>
               </button>
             );
@@ -172,7 +172,7 @@ export default function Gift() {
                   </h2>
                 </div>
                 <span className="text-3xl" aria-hidden>
-                  {isDigital ? "🫧" : activeStep === 1 ? "🧭" : "📦"}
+                  {isDigital ? "✦" : activeStep === 1 ? "🧭" : "📦"}
                 </span>
               </div>
               <p className="mt-3 text-sm leading-relaxed text-ink/70">{gift.teaser}</p>
@@ -190,7 +190,7 @@ export default function Gift() {
                     </p>
                     <p className="mx-auto max-w-xs text-sm leading-relaxed text-ink/65">
                       {isDigital
-                        ? "It is the only reward in this experience that does not require asking where the kitchen is."
+                        ? "It is small, mysterious, and has passed absolutely no compliance review."
                         : "We have hidden one actual object and are calling this a logistics department."}
                     </p>
                   </div>

@@ -7,7 +7,6 @@ import Placeholder from "@/components/Placeholder";
 
 export default function Landing() {
   const router = useRouter();
-  const [cookies, setCookies] = useState(true);
   const [loading, setLoading] = useState(true);
 
   // The over-long spinner sells the corporate incompetence AND preloads every
@@ -78,29 +77,6 @@ export default function Landing() {
         </p>
       </div>
 
-      {/* Two clicks of pure corporate authenticity. */}
-      {cookies && (
-        <div className="fixed inset-x-0 bottom-0 bg-white border-t-2 border-corp-border p-4 text-xs corp-shadow">
-          <p className="mb-3">
-            We value your privacy. We use cookies to enhance your recognition
-            experience.
-          </p>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setCookies(false)}
-              className="flex-1 bg-corp-blue text-white py-2.5 font-bold min-h-11"
-            >
-              ACCEPT ALL
-            </button>
-            <button
-              onClick={() => setCookies(false)}
-              className="flex-1 border border-corp-border py-2.5 min-h-11"
-            >
-              Manage preferences
-            </button>
-          </div>
-        </div>
-      )}
     </main>
   );
 }
