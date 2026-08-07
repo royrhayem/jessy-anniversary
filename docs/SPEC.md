@@ -190,7 +190,8 @@ paper, sea, soap. The team's real words. Ten years, and then the gift.
      BUG-9002         "Needs money to stop working" → WONTFIX
      BUG-0001         ← cannot be closed
 /tribute              The wall — team messages, photos, 10-year timeline
-/gift                 Location reveal + bubbles
+/gift                 Three-gift delivery — spa QR + two physical hunts
+/voucher/spa          Built-in spa voucher opened by the first QR
 /keepsake             Shareable card, "Certificate of 10 Years of Finding What
                       Everyone Else Missed"
 /_presenter           Hidden: skip-to-any-step control for the organizer
@@ -371,30 +372,29 @@ Full-bleed vertical scroll, warm palette, paper texture. Sections:
    in as she scrolls. *This is where every quote you collect lives.*
 4. **The line** — one full screen, one sentence, no ornament.
 
-### 6.8 `/gift` — The Reveal
+### 6.8 `/gift` — The Three-Gift Delivery
 ```
 ┌─────────────────────────────┐
 │                             │
-│   BUG-0001                  │
-│   RESOLUTION:               │
-│   ┌─────────────────────┐   │
-│   │  CANNOT REPRODUCE   │   │  Stamped, rotated, satisfying
-│   └─────────────────────┘   │
+│   REWARD RECOVERY           │
+│   01  SPA RESET   02  🔒    │  Three-step progress rail
+│   03  🔒                    │
 │                             │
-│   Because it was never      │
-│   a bug.                    │
+│   Three gifts.              │
+│   One slightly unnecessary  │
+│   quest.                    │
 │                             │
-│   ─────────────────────     │
+│   [ OPEN THE EVIDENCE ]     │  Digital gift: local QR → voucher
 │                             │
-│   Your actual gift is:      │
+│   [ REVEAL THE CLUE ]       │  Physical gifts: clue → location
 │                             │
-│   [ ████ TAP TO REVEAL ]    │  Scratch-off / soap-bubble wipe
-│                             │
-│   ○ ○  ○   ○ ○  ○  ○ ○      │  Soap bubbles rising, not confetti
+│   ○ ○  ○   ○ ○  ○  ○ ○      │  Soap bubbles on every claim
 └─────────────────────────────┘
 ```
-**Location is a single config value** — swap it the morning of the event.
-Supports both modes: `physical` (a riddle + a place) or `virtual` (a link/code).
+The first step renders a scannable QR that opens `/voucher/spa` by default (or
+`CONFIG.spaVoucherUrl` if a real spa booking URL is available). Steps two and
+three each reveal a clue, then the physical hiding place. Gift progress persists
+locally so a dropped tab does not reset the scavenger hunt.
 
 ---
 
@@ -630,14 +630,15 @@ she can keep. That's the strongest ending and costs one extra printout.
 // src/content.ts
 export const CONFIG = {
   code: "2016",
-  giftMode: "physical" as "physical" | "virtual",
-  gift: {
-    riddle: "Where the things you make begin.",
-    location: "The kitchen — top shelf, behind the mugs.",
-    virtualLink: null,
-  },
+  spaVoucherUrl: null,
   teamCode: ["7","2","0","3"],
 };
+
+export const REDEMPTION_GIFTS = [
+  { kind: "digital", title: "The reward that requires no walking" },
+  { kind: "physical", title: "The one that refused to be an app" },
+  { kind: "physical", title: "The final boss of appreciation" },
+];
 
 export const TICKETS: Ticket[] = [ /* 4 playable + final reveal */ ];
 export const TRIBUTES: Tribute[] = [
@@ -685,7 +686,7 @@ file.
 | **T-3 days** | AI images generated and placed. Full run-through on a real iPhone. |
 | **T-2 days** | **Test on Jessy's actual phone model**, on office wifi, at the actual spot she'll stand. Battery, brightness, notifications. |
 | **T-1 day** | Freeze. Print the 4 team-code digits. Hide the gift. Brief the 4 digit-holders. |
-| **T-1 day** | Set `giftMode` + location in `content.ts`, redeploy, verify. |
+| **T-1 day** | Set both physical hiding places + spa voucher copy in `content.ts`, redeploy, verify. |
 | **Day of** | Organizer opens `/_presenter` on their own phone as a safety net. |
 | **Day of** | **Backup:** the whole flow works on a second phone, pre-loaded, in your pocket. |
 | **T+1 day** | Optionally swap `/` to redirect straight to `/keepsake` so she can re-share it. |

@@ -16,14 +16,15 @@ npm run dev     # http://localhost:3000
 
 ## Docs
 
-- **[`docs/RUNBOOK.md`](docs/RUNBOOK.md)** — what to edit, codes, deploy, day-of checklist
+- **[`docs/RUNBOOK.md`](docs/RUNBOOK.md)** — what to edit, codes, gifts, deploy, day-of checklist
 - **[`docs/SPEC.md`](docs/SPEC.md)** — full product specification
+- **[`docs/gift-card-concept.png`](docs/gift-card-concept.png)** — front/back card design concept
 
 ## Editing
 
 Everything editable lives in **[`src/content.ts`](src/content.ts)**. Search for
-`TODO`. No component needs to change to swap names, quotes, photos, the team
-code, or the gift location.
+`TODO`. No component needs to change to swap names, quotes, photos, gift clues,
+locations, voucher copy, or the team code.
 
 ## Routes
 
@@ -36,6 +37,7 @@ code, or the gift location.
 | `/board` | II | Bug board — 4 playable tickets + final reveal |
 | `/ticket/[id]` | II | Ticket + mini-interaction |
 | `/tribute` | III | Stats, timeline, team messages |
-| `/gift` | III | The reveal |
+| `/gift` | III | Three-gift delivery: spa QR + two physical hunts |
+| `/voucher/spa` | III | Built-in spa voucher opened by the QR |
 | `/keepsake` | III | Certificate |
 | `/presenter` | — | Organiser controls (not linked) |

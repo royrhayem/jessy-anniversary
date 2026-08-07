@@ -2,12 +2,23 @@
  * ============================================================================
  *  EVERYTHING YOU NEED TO EDIT IS IN THIS FILE.
  * ============================================================================
- *  No components need to change to swap names, quotes, photos, the gift
- *  location, or the team code. Anything marked TODO is a placeholder.
+ *  No components need to change to swap names, quotes, photos, gift clues,
+ *  hiding places, voucher copy, or the team code. Anything marked TODO is a
+ *  placeholder.
  * ============================================================================
  */
 
-export type GiftMode = "physical" | "virtual";
+export type GiftKind = "digital" | "physical";
+
+export interface RedemptionGift {
+  key: "spa" | "physical-one" | "physical-two";
+  kind: GiftKind;
+  label: string;
+  title: string;
+  teaser: string;
+  clue: string;
+  location?: string;
+}
 
 export const CONFIG = {
   /** Printed on the back of the fake gift card. The year she started. */
@@ -37,18 +48,50 @@ export const CONFIG = {
   hintAfterMs: 20_000,
   autoSolveAfterMs: 45_000,
 
-  /** Set on the morning of the event. */
-  giftMode: "physical" as GiftMode,
+  /**
+   * Leave this null to use the built-in voucher page. Set it to the spa's
+   * actual booking/voucher URL when you have one; the QR updates itself.
+   */
+  spaVoucherUrl: null as string | null,
+} as const;
 
-  gift: {
-    /** Shown first, as a riddle. Keep it short enough to read aloud. */
-    riddle: "Where the things you make begin.",
-    /** The literal answer. Swap this the morning of. */
-    location: "The kitchen — top shelf, behind the mugs.", // TODO
-    /** Only used when giftMode === "virtual". */
-    virtualLink: null as string | null,
-    virtualLabel: "Open your gift",
+/** Copy and hiding places for the three-part ending. Update these on the day. */
+export const REDEMPTION_GIFTS = [
+  {
+    key: "spa",
+    kind: "digital",
+    label: "DIGITAL / 01",
+    title: "The reward that requires absolutely no walking",
+    teaser: "A spa reset. Because apparently sleep is not self-installing.",
+    clue: "Scan the evidence. Then book an afternoon where nobody can find you.",
   },
+  {
+    key: "physical-one",
+    kind: "physical",
+    label: "PHYSICAL / 02",
+    title: "The one that refused to be an app",
+    teaser: "A real object, hidden in the real world. Extremely inconvenient.",
+    clue: "Where the things you make begin.",
+    location: "The kitchen — top shelf, behind the mugs.",
+  },
+  {
+    key: "physical-two",
+    kind: "physical",
+    label: "PHYSICAL / 03",
+    title: "The final boss of appreciation",
+    teaser: "One last side quest. Please leave the screen to collect it.",
+    clue: "Where abandoned cables, big ideas, and suspiciously nice things gather.",
+    location: "TODO: set the hiding place for physical gift #2.",
+  },
+] as const satisfies readonly RedemptionGift[];
+
+/** The page opened by the spa QR when no external voucher URL is configured. */
+export const SPA_VOUCHER = {
+  spaName: "THE SPA RESET",
+  service: "One very deserved spa treatment",
+  recipient: "Jessy",
+  issuedBy: "Your team, who would like you to stop working for an afternoon",
+  finePrint: "Valid for one Jessy. Bug reports are not accepted during treatment.",
 } as const;
 
 /* ---------------------------------------------------------------------------

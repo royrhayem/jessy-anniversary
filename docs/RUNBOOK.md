@@ -7,7 +7,8 @@ Everything you need to run this on the day.
 ## 1. What to edit
 
 **`src/content.ts` is the only file you need to touch.** Every string, name,
-quote, photo path, stat and the gift location lives there. Search for `TODO`.
+quote, photo path, stat, gift clue, hiding place and voucher copy lives there.
+Search for `TODO`.
 
 | What | Where |
 |---|---|
@@ -17,8 +18,9 @@ quote, photo path, stat and the gift location lives there. Search for `TODO`.
 | Timeline entries | `TIMELINE` |
 | Stats | `STATS` |
 | **The final line** | `THE_LINE` ← the one that matters most |
-| **Gift location** | `CONFIG.gift` |
-| Gift mode | `CONFIG.giftMode` — `"physical"` or `"virtual"` |
+| **Three gift copy + locations** | `REDEMPTION_GIFTS` |
+| **Spa voucher copy** | `SPA_VOUCHER` |
+| **Spa QR destination** | `CONFIG.spaVoucherUrl` — leave `null` for `/voucher/spa` |
 
 ---
 
@@ -120,7 +122,8 @@ The design rule is: **she must never be stuck in front of an audience.**
 ## 8. Day-of checklist
 
 - [ ] All `TODO`s in `content.ts` replaced
-- [ ] `CONFIG.giftMode` and `CONFIG.gift` set to the real location
+- [ ] Both physical hiding places in `REDEMPTION_GIFTS` set to the real locations
+- [ ] `SPA_VOUCHER` copy and `CONFIG.spaVoucherUrl` checked
 - [ ] Redeployed and verified after the final content change
 - [ ] Ran the whole flow on **her phone model**, on **office wifi**
 - [ ] Four digit cards printed and handed out; holders briefed
