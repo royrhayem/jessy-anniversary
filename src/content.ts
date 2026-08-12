@@ -370,11 +370,12 @@ export const TIMELINE: TimelineEntry[] = [
   },
   {
     kind: "section",
-    title: "Mobile Hospital Testing transition",
+    title: "Mobile Hospital transition",
     points: [
       { title: "0 EPR" },
-      { title: "Carrying iOS and Android Mobile Hospital alone" },
+      { title: "Carrying iOS and Android Mobile Hospital testing alone" },
       { title: "Catalon automation" },
+      { title: "Inventory Health Spotlight. Ma 3am tethadaaa jessyy ma3 l ai :)" },
     ],
   },
   { kind: "event", title: "And the list goes on and onnnnnnnnn" },
