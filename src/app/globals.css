@@ -124,6 +124,11 @@ body {
   filter: none;
 }
 
+/* Jessy's photo on the certificate/keepsake page skips the duotone wash. */
+.keepsake-portrait {
+  filter: none;
+}
+
 .stamp {
   font-family: var(--font-mono);
   letter-spacing: 0.08em;

@@ -29,7 +29,7 @@ export default function Keepsake() {
           <Placeholder
             src="/photos/jessy/hero.jpg"
             label="Jessy — photo (public/photos/jessy/hero.jpg)"
-            className="portrait w-24 mx-auto"
+            className="portrait keepsake-portrait w-24 mx-auto"
           />
 
           <dl className="grid grid-cols-2 gap-3 pt-2">
