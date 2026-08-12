@@ -33,8 +33,11 @@ export default function Keepsake() {
           />
 
           <dl className="grid grid-cols-2 gap-3 pt-2">
-            {STATS.slice(0, 4).map((s) => (
-              <div key={s.label}>
+            {STATS.slice(0, 4).map((s, i, arr) => (
+              <div
+                key={s.label}
+                className={arr.length % 2 === 1 && i === arr.length - 1 ? "col-span-2" : undefined}
+              >
                 <dt className="font-serif text-lg text-sea tabular-nums">
                   {s.value.toLocaleString()}
                 </dt>
