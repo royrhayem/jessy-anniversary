@@ -192,7 +192,7 @@ export const TABBOULEH = {
     hint: "chile l ba2dounes men snenik 🌿",
   },
   verdict: {
-    text: "Ma fina na3mol l tabbouleh, l ba2dounes ba3don 3el2enin bi snenik",
+    text: "Ma fina na3mol l tabbouleh, l ba2dounes l 3el2anin ma bi addoo :((",
     aside: "(sorry ma elnelik 3anon)",
   },
 } as const;
