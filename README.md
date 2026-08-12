@@ -32,7 +32,7 @@ locations, voucher copy, or the team code.
 |---|---|---|
 | `/` | I | Corporate landing |
 | `/redeem` | I | Card code entry |
-| `/balance` | I | The escalating balance gag |
+| `/ragemeter` | I | The escalating rage meter gag |
 | `/crash` | II | The crash and the role flip |
 | `/board` | II | Bug board — 4 playable tickets + final reveal |
 | `/ticket/[id]` | II | Ticket + mini-interaction |

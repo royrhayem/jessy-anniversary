@@ -21,7 +21,7 @@ export default function Redeem() {
     const t = setTimeout(() => {
       if (code === CONFIG.cardCode) {
         haptic(20);
-        router.push("/balance");
+        router.push("/ragemeter");
       } else {
         setValidating(false);
         setAttempts((a) => a + 1);

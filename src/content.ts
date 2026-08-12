@@ -85,15 +85,15 @@ export const SPA_VOUCHER = {
 } as const;
 
 /* ---------------------------------------------------------------------------
- *  ACT I — the escalating balance gag
+ *  ACT I — the rage meter gag
  * ------------------------------------------------------------------------- */
 
-export const BALANCES = [
-  { value: "$0.00", note: null },
-  { value: "3.00 EGP", note: "Recalculating…" },
-  { value: "1 × bar of soap", note: "handmade, artisanal" },
-  { value: "4 hours of sleep", note: "EXPIRED" },
-  { value: "NaN", note: "FATAL" },
+export const RAGE_STAGES = [
+  { value: "0%", note: null, fill: 6, label: "Simmering" },
+  { value: "27%", note: "getting warmer", fill: 27, label: "Heating up" },
+  { value: "58%", note: "raised voices detected", fill: 58, label: "Boiling over" },
+  { value: "91%", note: "ABOUT TO SNAP", fill: 91, label: "Redlining" },
+  { value: "JESSY 3AM TENHAR", note: "OVERFLOW", fill: 100, label: "OVERFLOWED" },
 ] as const;
 
 /* ---------------------------------------------------------------------------

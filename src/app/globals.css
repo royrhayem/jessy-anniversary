@@ -160,6 +160,42 @@ body {
 }
 .falling { animation: fall 1.1s cubic-bezier(0.5, 0, 0.9, 0.4) forwards; }
 
+/* Rage meter — amplitude is set per-stage via --shake-amt. */
+@keyframes rageShake {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  10% { transform: translate(calc(var(--shake-amt, 2px) * -1), 1px) rotate(-0.4deg); }
+  20% { transform: translate(var(--shake-amt, 2px), -1px) rotate(0.4deg); }
+  30% { transform: translate(calc(var(--shake-amt, 2px) * -0.8), -1px); }
+  40% { transform: translate(var(--shake-amt, 2px), 1px); }
+  50% { transform: translate(calc(var(--shake-amt, 2px) * -0.6), 1px); }
+  60% { transform: translate(var(--shake-amt, 2px), -1px); }
+  70% { transform: translate(calc(var(--shake-amt, 2px) * -1), 1px); }
+  80% { transform: translate(var(--shake-amt, 2px), 1px); }
+  90% { transform: translate(calc(var(--shake-amt, 2px) * -0.6), -1px); }
+}
+.rage-shake { animation: rageShake 0.5s ease-in-out infinite; }
+
+@keyframes rageGlow {
+  0%, 100% { box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.18); }
+  50% { box-shadow: 0 0 22px 6px var(--rage-glow-color, rgba(192, 57, 43, 0.55)); }
+}
+.rage-glow { animation: rageGlow 0.85s ease-in-out infinite; }
+
+@keyframes rageHazard {
+  to { background-position: 56px 0; }
+}
+.rage-hazard {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--rage-hazard-a, #c0392b) 0px,
+    var(--rage-hazard-a, #c0392b) 12px,
+    var(--rage-hazard-b, #2c3136) 12px,
+    var(--rage-hazard-b, #2c3136) 24px
+  );
+  background-size: 200% 100%;
+  animation: rageHazard 1.1s linear infinite;
+}
+
 /* Nothing in this experience depends on motion. */
 @media (prefers-reduced-motion: reduce) {
   *,

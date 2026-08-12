@@ -11,7 +11,7 @@ import { useProgress } from "@/lib/progress";
 const STEPS = [
   ["/", "Act I — corporate landing"],
   ["/redeem", "Act I — code entry"],
-  ["/balance", "Act I — balance gag"],
+  ["/ragemeter", "Act I — rage meter gag"],
   ["/crash", "Act II — the crash / role flip"],
   ["/board", "Act II — bug board"],
   ["/tribute", "Act III — tribute wall"],

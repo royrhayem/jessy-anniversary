@@ -94,7 +94,7 @@ Not linked from anywhere in the experience.
 |---|---|---|
 | I | Landing (incl. 3.5s fake spinner) | ~40s |
 | I | Code entry | ~30s |
-| I | Balance gag | ~60s |
+| I | Rage meter gag | ~60s |
 | II | Crash / role flip | ~35s |
 | II | Four tickets + final reveal | ~2 min |
 | III | Tribute scroll | ~90s |
