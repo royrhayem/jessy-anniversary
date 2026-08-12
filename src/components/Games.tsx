@@ -92,8 +92,8 @@ function clock(minutes: number) {
 }
 
 /** Out of snoozes → the site offers help, asks ChatGPT, then delivers it. */
-type Phase = "snoozing" | "offer" | "ask" | "thinking" | "verdict";
-const PHASES: Phase[] = ["snoozing", "offer", "ask", "thinking", "verdict"];
+type Phase = "snoozing" | "offer" | "asking" | "ask" | "thinking" | "verdict";
+const PHASES: Phase[] = ["snoozing", "offer", "asking", "ask", "thinking", "verdict"];
 
 function Sleep({ solved, onSolve, resolution }: GameProps) {
   const [taps, setTaps] = useState(0);
@@ -106,11 +106,15 @@ function Sleep({ solved, onSolve, resolution }: GameProps) {
   }, [out, phase]);
 
   // "ask" waits for her to hit send; "verdict" is terminal — it stamps and
-  // stays. The other two move on their own.
+  // stays. The other three move on their own.
   useEffect(() => {
-    if (phase !== "offer" && phase !== "thinking") return;
+    if (phase !== "offer" && phase !== "asking" && phase !== "thinking") return;
     const ms =
-      phase === "offer" ? SLEEP_ASSIST.offer.ms : SLEEP_ASSIST.thinking.ms;
+      phase === "offer"
+        ? SLEEP_ASSIST.offer.ms
+        : phase === "asking"
+          ? SLEEP_ASSIST.asking.ms
+          : SLEEP_ASSIST.thinking.ms;
 
     const t = setTimeout(
       () => setPhase(PHASES[PHASES.indexOf(phase) + 1]),
@@ -166,7 +170,7 @@ function Sleep({ solved, onSolve, resolution }: GameProps) {
             src={SLEEP_ASSIST.ask.image}
             label={SLEEP_ASSIST.ask.imageLabel}
             fit="contain"
-            className="w-3/5 mx-auto min-h-20 rounded border border-dbg-line bg-black"
+            className="w-full mx-auto min-h-20 rounded border border-dbg-line bg-black"
           />
 
           <div className="h-16 grid place-items-center">
@@ -220,6 +224,15 @@ function Sleep({ solved, onSolve, resolution }: GameProps) {
             <p className="text-dbg-green font-mono text-lg text-center animate-[fadeUp_.3s_ease-out]">
               {SLEEP_ASSIST.offer.text}
             </p>
+          )}
+
+          {phase === "asking" && (
+            <div className="flex items-center gap-2.5 animate-[fadeUp_.3s_ease-out]">
+              <span className="h-4 w-4 rounded-full border-2 border-dbg-line border-t-dbg-green animate-spin" />
+              <span className="text-[11px] font-mono text-dbg-muted">
+                {SLEEP_ASSIST.asking.label}
+              </span>
+            </div>
           )}
         </div>
 

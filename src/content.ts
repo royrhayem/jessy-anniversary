@@ -178,6 +178,7 @@ export const TICKETS: Ticket[] = [
  */
 export const SLEEP_ASSIST = {
   offer: { text: "khalina nse3dik", ms: 1600 },
+  asking: { label: "asking chatgpt…", ms: 1200 },
   /** She reads the question, then sends it herself — no timer on this step. */
   ask: {
     image: "/chatgpt-sleep.png",
