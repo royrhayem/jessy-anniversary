@@ -263,6 +263,22 @@ export const MILLION = {
   verdict: "Nehna aslan menhebiik KTSIRRR KTSIRRRR w mamnou3 tfele :)",
 } as const;
 
+/**
+ * The scratch transition — between the bug board closing and the tribute
+ * opening. She reads the line, then scratches to find out who "them" is:
+ * a photo of her two kids, mid-celebration.
+ */
+export const REVEAL = {
+  message:
+    "Zedneha ktirrr w ma badna nmout, fa hala2 ha ntare l ajwe2 bi aktar " +
+    "chakhsen bethebiyonn bi hayetik",
+  messageMs: 3800,
+  photo: "/photos/kids-party.jpg",
+  photoLabel: "The two people she loves most",
+  prompt: "scratch to reveal",
+  revealedNote: "Approved without review. Ship it.",
+} as const;
+
 /* ---------------------------------------------------------------------------
  *  ACT III — the tribute
  * ------------------------------------------------------------------------- */

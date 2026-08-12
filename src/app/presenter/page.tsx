@@ -14,6 +14,7 @@ const STEPS = [
   ["/ragemeter", "Act I — rage meter gag"],
   ["/crash", "Act II — the crash / role flip"],
   ["/board", "Act II — bug board"],
+  ["/reveal", "Act II→III — scratch transition"],
   ["/tribute", "Act III — tribute wall"],
   ["/gift", "Act III — gift reveal"],
   ["/voucher/spa", "Act III — spa voucher"],

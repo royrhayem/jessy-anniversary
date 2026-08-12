@@ -56,8 +56,8 @@ export default function TicketPage() {
   const isFinal = ticket.id === FINAL_TICKET_ID;
   const done = solved || alreadyClosed;
 
-  // BUG-0001 hands off to the tribute rather than back to the board.
-  const nextHref = isFinal ? "/tribute" : "/board";
+  // BUG-0001 hands off to the scratch transition rather than back to the board.
+  const nextHref = isFinal ? "/reveal" : "/board";
 
   return (
     <main className="dbg min-h-dvh flex flex-col pb-8">

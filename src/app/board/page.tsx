@@ -12,7 +12,7 @@ export default function Board() {
 
   // Four playable tickets down, one to go — the board's job is finished.
   useEffect(() => {
-    if (isClosed(FINAL_TICKET_ID)) router.replace("/tribute");
+    if (isClosed(FINAL_TICKET_ID)) router.replace("/reveal");
   }, [closed, isClosed, router]);
 
   if (!ready) return <main className="dbg min-h-dvh" />;
