@@ -60,7 +60,7 @@ export default function Redeem() {
 
       <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
         <p className="text-sm max-w-[16rem] leading-relaxed">
-          Enter the 4-digit code found on the back of your card:
+          The back of the card forgot the code. Solve the clue below:
         </p>
 
         <div className="mt-7 flex gap-2.5" role="group" aria-label="Card code">
@@ -84,6 +84,19 @@ export default function Redeem() {
             />
           ))}
         </div>
+
+        <p className="mt-5 max-w-[18rem] text-[10px] leading-relaxed text-corp-muted">
+          <span className="font-bold uppercase tracking-wider">Disclaimer:</span>{" "}
+          let <span className="font-mono text-corp-text">x</span> be the
+          4-digit number. It is very easy to find. If you don&apos;t, that&apos;s
+          concerning. Solve{" "}
+          <span className="font-mono text-corp-text">(10 × x) − (9 × x)</span>{" "}
+          to reveal the code.
+          <br />
+          Not great at maths? Ask Chloe for help :D
+          <br />
+          Getting angry? We&apos;ll help you. We promise.
+        </p>
 
         <div className="mt-6 h-6" aria-live="polite">
           {validating && <p className="text-xs text-corp-muted">Validating…</p>}
