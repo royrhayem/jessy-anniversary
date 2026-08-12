@@ -100,83 +100,50 @@ export const BALANCES = [
  *  ACT II — the bug board
  * ------------------------------------------------------------------------- */
 
-export type TicketId =
-  | "BUG-5006" | "BUG-6120" | "BUG-8001" | "BUG-9002" | "BUG-0001";
+export type TicketId = "BUG-1042" | "BUG-3011" | "BUG-0001";
 
-export type GameKind =
-  | "bubbles" | "teamcode" | "scratch" | "raise" | "final";
+export type GameKind = "sleep" | "tabouleh" | "final";
+
+/** The finale. Stays locked until every other ticket on the board is closed. */
+export const FINAL_TICKET_ID = "BUG-0001" satisfies TicketId;
 
 export interface Ticket {
   id: TicketId;
   title: string;
-  reporter: string;
+  /** Omit to hide the "reported by" line entirely. */
+  reporter?: string;
   severity: string;
-  steps: string[];
+  /** Omit to drop the "steps to reproduce" block entirely. */
+  steps?: string[];
   game: GameKind;
   resolution: string;
-  /** Shown after the interaction completes. The punchline. */
-  closingNote: string;
+  /** Shown after the interaction completes. The punchline. Optional. */
+  closingNote?: string;
+  /**
+   * The game stamps the resolution itself and stays on screen once closed —
+   * no separate closing panel. For tickets whose punchline IS the last frame
+   * of the interaction.
+   */
+  stampInGame?: boolean;
 }
 
-/** Four playable tickets, followed by the locked appreciation reveal. */
+/** Two playable tickets, followed by the locked appreciation reveal. */
 export const TICKETS: Ticket[] = [
   {
-    id: "BUG-5006",
-    title: "Excess soap detected in production",
-    reporter: "Raja",
-    severity: "P2",
-    steps: [
-      "Leave Jessy alone with oils and lye",
-      "Observe",
-      "The entire office now smells like lavender",
-    ],
-    game: "bubbles",
-    resolution: "FIXED",
-    closingNote: "Cleaned up. Literally.",
-  },
-  {
-    id: "BUG-6120",
-    title: "Cannot verify user belongs to a real team",
-    reporter: "RewardHub™ Security",
-    severity: "BLOCKER",
-    steps: [
-      "Query team membership",
-      "Receive: unverified",
-      "Escalate to human beings",
-    ],
-    game: "teamcode",
-    resolution: "VERIFIED",
-    closingNote: "Team confirmed. All four of them. Loudly.",
-  },
-  {
-    id: "BUG-8001",
-    title: "Unauthorized art project detected in kids' room",
-    reporter: "Roy",
-    severity: "P0",
-    steps: [
-      "Have an idea at 11pm",
-      "Do not sleep (see BUG-1042)",
-      "By morning it exists",
-    ],
-    game: "scratch",
-    resolution: "APPROVED",
-    closingNote: "Approved without review. Ship it.",
-  },
-  {
-    id: "BUG-9002",
-    title: "User requires funds in order to terminate employment",
-    reporter: "Hadil",
+    id: "BUG-1042",
+    title: "Jessy ma betnem",
     severity: "CRITICAL",
-    steps: [
-      "Request raise",
-      "Request raise again",
-      "Consider the beach",
-    ],
-    game: "raise",
+    game: "sleep",
     resolution: "WONTFIX",
-    closingNote:
-      "Request received. Request understood. Request forwarded to a department " +
-      "that does not exist. Closing as WONTFIX. We are so sorry.",
+    stampInGame: true,
+  },
+  {
+    id: "BUG-3011",
+    title: "TABBOULEHHH NOT FOUND",
+    severity: "CRITICAL",
+    game: "tabouleh",
+    resolution: "WONTFIX",
+    stampInGame: true,
   },
   {
     id: "BUG-0001",
@@ -193,6 +160,42 @@ export const TICKETS: Ticket[] = [
     closingNote: "Because it was never a bug.",
   },
 ];
+
+/**
+ * BUG-1042 — what happens once she has run out of snoozes. The site offers to
+ * help, asks ChatGPT, thinks about it, and comes back with the verdict.
+ * Each step's `ms` is how long it stays on screen before the next one.
+ */
+export const SLEEP_ASSIST = {
+  offer: { text: "khalina nse3dik", ms: 1600 },
+  /** She reads the question, then sends it herself — no timer on this step. */
+  ask: {
+    image: "/chatgpt-sleep.png",
+    imageLabel: "Screenshot: asking ChatGPT how Jessy can sleep 8 hours",
+    button: "SEND ↑",
+  },
+  thinking: { label: "analyzing sleep patterns…", ms: 2600 },
+  /** The last frame. The ticket is stamped here and stays put. */
+  verdict: { text: "KIZBIII KBIRIIIII MA FIKEEEE TNEME 8 se3et bi 3 se3et" },
+} as const;
+
+/**
+ * BUG-3011 — she asks for tabbouleh, the kitchen starts, and then remembers
+ * the one time the parsley stayed in her teeth all afternoon.
+ */
+export const TABBOULEH = {
+  start: "PREPARE TABBOULEH",
+  /** Three sprigs stuck in her teeth. She picks them out one by one. */
+  pick: {
+    count: 3,
+    label: "parsley stuck",
+    hint: "chile l ba2dounes men snenik 🌿",
+  },
+  verdict: {
+    text: "Ma fina na3mol l tabbouleh, l ba2dounes ba3don 3el2enin bi snenik",
+    aside: "(sorry ma elnelik 3anon)",
+  },
+} as const;
 
 /* ---------------------------------------------------------------------------
  *  ACT III — the tribute

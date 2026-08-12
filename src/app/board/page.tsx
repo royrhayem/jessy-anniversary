@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { TICKETS } from "@/content";
+import { FINAL_TICKET_ID, TICKETS } from "@/content";
 import { useProgress } from "@/lib/progress";
 
 export default function Board() {
@@ -12,7 +12,7 @@ export default function Board() {
 
   // Four playable tickets down, one to go — the board's job is finished.
   useEffect(() => {
-    if (isClosed("BUG-0001")) router.replace("/tribute");
+    if (isClosed(FINAL_TICKET_ID)) router.replace("/tribute");
   }, [closed, isClosed, router]);
 
   if (!ready) return <main className="dbg min-h-dvh" />;
@@ -43,7 +43,7 @@ export default function Board() {
       <ul className="px-4 py-4 space-y-3">
         {TICKETS.map((t, i) => {
           const done = isClosed(t.id);
-          const isFinal = t.id === "BUG-0001";
+          const isFinal = t.id === FINAL_TICKET_ID;
           const locked = isFinal && !allButFinalClosed;
 
           return (
@@ -87,7 +87,8 @@ export default function Board() {
 
                 {!locked && (
                   <p className="mt-2 text-[11px] text-dbg-muted font-mono">
-                    reported by {t.reporter} · {t.severity}
+                    {t.reporter && `reported by ${t.reporter} · `}
+                    {t.severity}
                   </p>
                 )}
               </Link>
@@ -96,7 +97,7 @@ export default function Board() {
         })}
       </ul>
 
-      {allButFinalClosed && !isClosed("BUG-0001") && (
+      {allButFinalClosed && !isClosed(FINAL_TICKET_ID) && (
         <p className="px-6 text-center text-[11px] text-dbg-amber font-mono animate-pulse">
           BUG-0001 unlocked.
         </p>

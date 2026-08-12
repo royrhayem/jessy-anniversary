@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { CONFIG, type GameKind } from "@/content";
+import { useEffect, useState } from "react";
+import { SLEEP_ASSIST, TABBOULEH, type GameKind } from "@/content";
 import { haptic } from "@/lib/progress";
 import Placeholder from "./Placeholder";
 
 /**
- * Four micro-interactions are used by the board. Rules for every one of them:
+ * Three micro-interactions are used by the board. Rules for every one of them:
  *   - one thumb, portrait, under 60 seconds
  *   - no text input, no failure state, nothing can be answered "wrong"
  *   - `solved` is forced true by the parent on auto-solve, so every game must
@@ -15,6 +15,8 @@ import Placeholder from "./Placeholder";
 export interface GameProps {
   solved: boolean;
   onSolve: () => void;
+  /** The ticket's resolution, for games that stamp it themselves. */
+  resolution?: string;
 }
 
 export default function Game({
@@ -22,10 +24,8 @@ export default function Game({
   ...props
 }: GameProps & { kind: GameKind }) {
   switch (kind) {
-    case "bubbles": return <Bubbles {...props} />;
-    case "teamcode": return <TeamCode {...props} />;
-    case "scratch": return <Scratch {...props} />;
-    case "raise": return <Raise {...props} />;
+    case "sleep": return <Sleep {...props} />;
+    case "tabouleh": return <Tabouleh {...props} />;
     case "final": return <Final {...props} />;
   }
 }
@@ -34,259 +34,348 @@ const panel =
   "rounded-md border border-dbg-line bg-dbg-bg p-4 flex flex-col items-center gap-4";
 
 /* -------------------------------------------------------------------------
- *  BUG-5006 — Bubbles. Pop eight to spell a word.
+ *  BUG-1042 — Sleep. Snooze all you like; the night never gets quieter.
+ *  Unwinnable by design; that IS the joke.
  * ---------------------------------------------------------------------- */
-const WORD = "HANDMADE";
+const KHOCH = "khochpochpoch";
+const SNOOZES_TO_GIVE_UP = 7;
+const FIRST_ALARM_MIN = 3 * 60 + 7; // 03:07 — nobody chose this hour
 
-function Bubbles({ solved, onSolve }: GameProps) {
-  const [popped, setPopped] = useState<number[]>([]);
-  useEffect(() => {
-    if (popped.length === WORD.length && !solved) onSolve();
-  }, [popped, solved, onSolve]);
-
-  const done = solved || popped.length === WORD.length;
+/** The word, falling down the side of the screen. Faster every snooze. */
+function KhochStream({ taps }: { taps: number }) {
+  // 14 lines, printed twice, scrolled by exactly half its height → seamless.
+  const lines = Array.from({ length: 14 }, (_, i) => i);
+  const speed = Math.max(1.2, 5 - taps * 0.5);
 
   return (
-    <div className={panel}>
-      <p className="text-xs text-dbg-muted font-mono">soap.cleanup()</p>
-
-      <div className="grid grid-cols-4 gap-2.5 w-full">
-        {WORD.split("").map((ch, i) => {
-          const isPopped = done || popped.includes(i);
-          return (
-            <button
-              key={i}
-              aria-label={isPopped ? ch : `Bubble ${i + 1}`}
-              onClick={() => {
-                if (isPopped) return;
-                setPopped((p) => [...p, i]);
-                haptic(14);
-              }}
-              className={`aspect-square rounded-full grid place-items-center font-mono text-lg transition-all min-h-12 ${
-                isPopped
-                  ? "bg-transparent text-dbg-green scale-100"
-                  : "bg-linear-to-br from-white/25 to-white/5 border border-white/25 active:scale-90"
-              }`}
-            >
-              {isPopped ? ch : ""}
-            </button>
-          );
-        })}
-      </div>
-
-      {done && (
-        <p className="text-dbg-green text-sm font-mono">Cleaned up. Literally.</p>
-      )}
-    </div>
-  );
-}
-
-/* -------------------------------------------------------------------------
- *  BUG-6120 — The room. She has to turn around and ask her team.
- *  This is the only moment that makes the audience participants.
- * ---------------------------------------------------------------------- */
-function TeamCode({ solved, onSolve }: GameProps) {
-  const [entered, setEntered] = useState<string[]>([]);
-  const target = CONFIG.teamCode;
-
-  useEffect(() => {
-    if (entered.length === target.length && !solved) {
-      haptic([20, 40, 20, 40, 60]);
-      onSolve();
-    }
-  }, [entered, target.length, solved, onSolve]);
-
-  // Nobody waits forever with a room watching.
-  useEffect(() => {
-    if (solved) return;
-    const t = setTimeout(() => setEntered([...target]), 30_000);
-    return () => clearTimeout(t);
-  }, [solved, target]);
-
-  const filled = solved ? [...target] : entered;
-
-  return (
-    <div className={panel}>
-      <p className="text-xs text-dbg-amber font-mono text-center leading-relaxed">
-        Team membership unverified.
-        <br />
-        Ask them. All four.
-      </p>
-
-      <div className="flex gap-2.5" role="group" aria-label="Team verification code">
-        {target.map((_, i) => (
-          <div
+    <div
+      aria-hidden
+      // `h-full` here would resolve to 0 against the auto-height row and clip
+      // the whole stream — `self-stretch` is what gives it the row's height.
+      className="relative w-40 shrink-0 self-stretch overflow-hidden border-l border-dbg-line"
+      style={{
+        maskImage:
+          "linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)",
+        WebkitMaskImage:
+          "linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)",
+      }}
+    >
+      <div
+        className="absolute inset-x-0 top-0 pl-2"
+        style={{ animation: `khoch ${speed}s linear infinite` }}
+      >
+        {[...lines, ...lines].map((_, i) => (
+          <p
             key={i}
-            className={`w-14 h-16 rounded border-2 grid place-items-center font-mono text-2xl ${
-              filled[i]
-                ? "border-dbg-green text-dbg-green"
-                : "border-dbg-line text-dbg-muted"
-            }`}
+            className="font-mono text-xs leading-6 text-dbg-purple/80 whitespace-nowrap"
           >
-            {filled[i] ?? "·"}
-          </div>
+            {KHOCH}
+          </p>
         ))}
       </div>
 
-      {!solved && (
-        <div className="grid grid-cols-5 gap-1.5 w-full">
-          {"0123456789".split("").map((d) => (
-            <button
-              key={d}
-              onClick={() => {
-                setEntered((e) =>
-                  e.length >= target.length ? e : [...e, d],
-                );
-                haptic(8);
-              }}
-              className="border border-dbg-line rounded py-3 min-h-12 font-mono active:border-dbg-green"
-            >
-              {d}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {!solved && entered.length > 0 && (
-        <button
-          onClick={() => setEntered([])}
-          className="text-[11px] text-dbg-muted font-mono min-h-11"
-        >
-          clear
-        </button>
-      )}
-
-      {solved && (
-        <p className="text-dbg-green text-sm font-mono text-center">
-          They were always going to say yes.
-        </p>
-      )}
+      <style>{`
+        @keyframes khoch {
+          from { transform: translateY(0); }
+          to   { transform: translateY(-50%); }
+        }
+      `}</style>
     </div>
   );
 }
 
-/* -------------------------------------------------------------------------
- *  BUG-8001 — Scratch to reveal the kids' drawing.
- * ---------------------------------------------------------------------- */
-function Scratch({ solved, onSolve }: GameProps) {
-  const [cells, setCells] = useState<number[]>([]);
-  const TOTAL = 24;
+function clock(minutes: number) {
+  const m = minutes % (24 * 60);
+  return `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
+}
+
+/** Out of snoozes → the site offers help, asks ChatGPT, then delivers it. */
+type Phase = "snoozing" | "offer" | "ask" | "thinking" | "verdict";
+const PHASES: Phase[] = ["snoozing", "offer", "ask", "thinking", "verdict"];
+
+function Sleep({ solved, onSolve, resolution }: GameProps) {
+  const [taps, setTaps] = useState(0);
+  const [phase, setPhase] = useState<Phase>("snoozing");
+
+  const out = taps >= SNOOZES_TO_GIVE_UP;
 
   useEffect(() => {
-    if (cells.length >= TOTAL * 0.6 && !solved) onSolve();
-  }, [cells, solved, onSolve]);
+    if (out && phase === "snoozing") setPhase("offer");
+  }, [out, phase]);
 
-  const done = solved || cells.length >= TOTAL * 0.6;
+  // "ask" waits for her to hit send; "verdict" is terminal — it stamps and
+  // stays. The other two move on their own.
+  useEffect(() => {
+    if (phase !== "offer" && phase !== "thinking") return;
+    const ms =
+      phase === "offer" ? SLEEP_ASSIST.offer.ms : SLEEP_ASSIST.thinking.ms;
 
-  return (
-    <div className={panel}>
-      <p className="text-xs text-dbg-muted font-mono">
-        {done ? "asset approved" : "scratch to reveal"}
-      </p>
+    const t = setTimeout(
+      () => setPhase(PHASES[PHASES.indexOf(phase) + 1]),
+      ms,
+    );
+    return () => clearTimeout(t);
+  }, [phase]);
 
-      <div className="relative w-full aspect-4/3 rounded overflow-hidden">
-        <Placeholder
-          src="/photos/kids-party.jpg"
-          label="Kids celebrating with balloons"
-          className="absolute inset-0 w-full h-full"
-        />
-        {!done && (
-          <div className="absolute inset-0 grid grid-cols-6 grid-rows-4">
-            {Array.from({ length: TOTAL }).map((_, i) => (
-              <button
-                key={i}
-                aria-label="Scratch"
-                onPointerEnter={() => {
-                  if (!cells.includes(i)) {
-                    setCells((c) => [...c, i]);
-                    haptic(4);
-                  }
-                }}
-                onPointerDown={() => {
-                  setCells((c) => (c.includes(i) ? c : [...c, i]));
-                  haptic(4);
-                }}
-                className={`bg-dbg-line transition-opacity duration-200 ${
-                  cells.includes(i) ? "opacity-0 pointer-events-none" : "opacity-100"
-                }`}
-              />
-            ))}
-          </div>
-        )}
-      </div>
+  // Closed the moment the verdict lands, so she can move to the next bug.
+  useEffect(() => {
+    if (phase !== "verdict" || solved) return;
+    haptic([40, 60, 40]);
+    onSolve();
+  }, [phase, solved, onSolve]);
 
-      {done && (
-        <p className="text-dbg-green text-sm font-mono">
-          Approved without review. Ship it.
-        </p>
-      )}
-    </div>
-  );
-}
+  const now = FIRST_ALARM_MIN + taps * 5;
 
-/* -------------------------------------------------------------------------
- *  BUG-9002 — The raise. Dodges three times, then 403s. The callback to the
- *  team's own running joke. Biggest laugh of Act II.
- * ---------------------------------------------------------------------- */
-function Raise({ solved, onSolve }: GameProps) {
-  const [dodges, setDodges] = useState(0);
-  const [pos, setPos] = useState({ x: 0, y: 0 });
-  const [submitting, setSubmitting] = useState(false);
-  const [denied, setDenied] = useState(false);
-  const box = useRef<HTMLDivElement>(null);
-
-  function dodge() {
-    haptic(6);
-    setDodges((d) => d + 1);
-    setPos({
-      x: (Math.random() - 0.5) * 120,
-      y: (Math.random() - 0.5) * 80,
-    });
-  }
-
-  function submit() {
-    setSubmitting(true);
-    haptic(15);
-    setTimeout(() => {
-      setSubmitting(false);
-      setDenied(true);
-      haptic([50, 80, 50]);
-      setTimeout(() => onSolve(), 1600);
-    }, 2200);
-  }
-
-  if (solved || denied) {
+  // Auto-solve can force `solved` at any point — land on the punchline.
+  if (solved || phase === "verdict") {
     return (
-      <div className={panel}>
-        <p className="text-5xl">🔒</p>
-        <p className="font-mono text-dbg-red text-lg">403 FORBIDDEN</p>
-        <p className="text-[11px] text-dbg-muted font-mono text-center leading-relaxed">
-          Request forwarded to a department
-          <br />
-          that does not exist.
-        </p>
+      <div className="rounded-md border border-dbg-line bg-dbg-bg p-4">
+        <div className="flex items-stretch gap-3 min-h-44">
+          <div className="flex-1 flex flex-col items-center justify-center gap-5 animate-[fadeUp_.3s_ease-out]">
+            <p className="text-dbg-amber font-mono font-bold text-lg leading-tight text-center">
+              {SLEEP_ASSIST.verdict.text}
+            </p>
+            {resolution && (
+              <span className="stamp text-dbg-green text-sm">{resolution}</span>
+            )}
+          </div>
+          <KhochStream taps={taps} />
+        </div>
+        <style>{`
+          @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: none; }
+          }
+        `}</style>
       </div>
     );
   }
 
   return (
-    <div className={`${panel} min-h-56 justify-center`} ref={box}>
-      <p className="text-xs text-dbg-muted font-mono text-center">
-        {submitting ? "Submitting to payroll…" : "salary.increase()"}
+    <div className="rounded-md border border-dbg-line bg-dbg-bg p-4">
+      <p className="text-xs text-dbg-muted font-mono mb-3">
+        sleep.snooze() · {taps}×
       </p>
 
-      {submitting ? (
-        <div className="h-10 w-10 rounded-full border-4 border-dbg-line border-t-dbg-green animate-spin" />
+      {/* The stream steps aside here — this beat is just the screenshot. */}
+      {phase === "ask" || phase === "thinking" ? (
+        <div className="animate-[fadeUp_.3s_ease-out]">
+          <Placeholder
+            src={SLEEP_ASSIST.ask.image}
+            label={SLEEP_ASSIST.ask.imageLabel}
+            fit="contain"
+            className="w-3/5 mx-auto min-h-20 rounded border border-dbg-line bg-black"
+          />
+
+          <div className="h-16 grid place-items-center">
+            {phase === "ask" ? (
+              <button
+                onClick={() => {
+                  setPhase("thinking");
+                  haptic(12);
+                }}
+                className="border-2 border-dbg-green text-dbg-green font-mono text-sm px-8 py-3 min-h-12 rounded active:bg-dbg-green/10"
+              >
+                {SLEEP_ASSIST.ask.button}
+              </button>
+            ) : (
+              <div className="flex items-center gap-2.5 animate-[fadeUp_.3s_ease-out]">
+                <span className="h-4 w-4 rounded-full border-2 border-dbg-line border-t-dbg-green animate-spin" />
+                <span className="text-[11px] font-mono text-dbg-muted">
+                  {SLEEP_ASSIST.thinking.label}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
       ) : (
-        <button
-          onPointerEnter={() => dodges < 3 && dodge()}
-          onClick={() => (dodges < 3 ? dodge() : submit())}
-          style={{ transform: `translate(${pos.x}px, ${pos.y}px)` }}
-          className="border-2 border-dbg-green text-dbg-green font-mono px-6 py-3.5 min-h-12 rounded transition-transform duration-200 active:bg-dbg-green/10"
-        >
-          APPROVE RAISE
-        </button>
+      <div className="flex items-stretch gap-3 min-h-44">
+        <div className="flex-1 flex flex-col items-center justify-center gap-4">
+          {phase === "snoozing" && (
+            <>
+              <div className="text-center">
+                <span className="text-3xl inline-block animate-[ring_.7s_ease-in-out_infinite]">
+                  ⏰
+                </span>
+                <p className="font-mono text-3xl tracking-widest mt-1">
+                  {clock(now)}
+                </p>
+              </div>
+
+              <button
+                onClick={() => {
+                  setTaps((t) => t + 1);
+                  haptic([10, 40, 10]);
+                }}
+                className="w-full border-2 border-dbg-purple text-dbg-purple font-mono text-sm py-3.5 min-h-12 active:bg-dbg-purple/10"
+              >
+                SNOOZE +5 min
+              </button>
+            </>
+          )}
+
+          {phase === "offer" && (
+            <p className="text-dbg-green font-mono text-lg text-center animate-[fadeUp_.3s_ease-out]">
+              {SLEEP_ASSIST.offer.text}
+            </p>
+          )}
+        </div>
+
+        <KhochStream taps={taps} />
+      </div>
       )}
+
+      <style>{`
+        @keyframes ring {
+          0%, 100% { transform: rotate(0deg); }
+          25%      { transform: rotate(-14deg); }
+          75%      { transform: rotate(14deg); }
+        }
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(8px); }
+          to   { opacity: 1; transform: none; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------
+ *  BUG-3011 — Tabbouleh. The kitchen tries, then remembers the teeth.
+ * ---------------------------------------------------------------------- */
+/**
+ * Teeth are w-7 (28px) with a gap-1 (4px) between them, inside px-2 (8px) of
+ * gum. So gap n sits at 8 + 32n + 30 from the mouth's left edge — the sprigs
+ * are placed in px against that grid rather than as a percentage of the panel,
+ * which is far wider than the teeth and drifts them off.
+ */
+const TOOTH = 28;
+const TOOTH_GAP = 4;
+const GUM_PAD = 8;
+const sprigX = (gap: number) => GUM_PAD + (TOOTH + TOOTH_GAP) * gap + TOOTH + TOOTH_GAP / 2;
+
+/** Wedged in the 1st, 3rd and 5th gap, each at its own angle. */
+const SPRIGS = [
+  { gap: 0, tilt: -18 },
+  { gap: 2, tilt: 6 },
+  { gap: 4, tilt: 22 },
+];
+
+function Tabouleh({ solved, onSolve, resolution }: GameProps) {
+  const [phase, setPhase] = useState<"idle" | "pick" | "verdict">("idle");
+  const [picked, setPicked] = useState<number[]>([]);
+
+  // Let the last sprig finish popping before the excuse lands.
+  useEffect(() => {
+    if (phase !== "pick" || picked.length < TABBOULEH.pick.count) return;
+    const t = setTimeout(() => setPhase("verdict"), 700);
+    return () => clearTimeout(t);
+  }, [phase, picked]);
+
+  useEffect(() => {
+    if (phase !== "verdict" || solved) return;
+    haptic([40, 60, 40]);
+    onSolve();
+  }, [phase, solved, onSolve]);
+
+  if (solved || phase === "verdict") {
+    return (
+      <div className={`${panel} min-h-52 justify-center`}>
+        <span className="text-4xl">🥗</span>
+        <p className="text-dbg-amber font-mono text-base leading-relaxed text-center animate-[fadeUp_.3s_ease-out]">
+          {TABBOULEH.verdict.text}
+        </p>
+        <p className="text-[11px] text-dbg-muted font-mono text-center">
+          {TABBOULEH.verdict.aside}
+        </p>
+        {resolution && (
+          <span className="stamp text-dbg-green text-sm mt-1">{resolution}</span>
+        )}
+        <style>{`
+          @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: none; }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
+  if (phase === "idle") {
+    return (
+      <div className={`${panel} min-h-52 justify-center`}>
+        <span className="text-5xl">🥣</span>
+        <button
+          onClick={() => {
+            setPhase("pick");
+            haptic(12);
+          }}
+          className="w-full border-2 border-dbg-green text-dbg-green font-mono text-sm py-3.5 min-h-12 active:bg-dbg-green/10"
+        >
+          🌿 {TABBOULEH.start}
+        </button>
+      </div>
+    );
+  }
+
+  const left = TABBOULEH.pick.count - picked.length;
+
+  return (
+    <div className={`${panel} min-h-52 justify-center`}>
+      <p className="text-xs text-dbg-muted font-mono">
+        {TABBOULEH.pick.label}: {left}
+      </p>
+
+      {/* A smile with three sprigs still in it. Tap each one to pull it out. */}
+      <div className="flex justify-center w-full select-none">
+        <div className="relative inline-block rounded-lg bg-[#8d3b45] px-2 pt-2.5 pb-3">
+          <div className="flex gap-1">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <span
+                key={i}
+                className="h-9 w-7 rounded-t-sm rounded-b-md bg-[#f6f2e7]"
+              />
+            ))}
+          </div>
+
+          {SPRIGS.map((s, i) => {
+            const gone = picked.includes(i);
+            return (
+              <button
+                key={i}
+                aria-label={gone ? "Picked" : `Pick out parsley ${i + 1}`}
+                disabled={gone}
+                onClick={() => {
+                  setPicked((p) => (p.includes(i) ? p : [...p, i]));
+                  haptic([12, 30]);
+                }}
+                style={{ left: sprigX(s.gap), rotate: `${s.tilt}deg` }}
+                className={`absolute top-0 w-11 h-11 grid place-items-center text-xl transition-all duration-500 -translate-x-1/2 ${
+                  gone
+                    ? "opacity-0 scale-50 -translate-y-16 pointer-events-none"
+                    : "opacity-100 active:scale-90"
+                }`}
+              >
+                <span className="animate-[bob_1.4s_ease-in-out_infinite] drop-shadow-[0_1px_2px_rgba(0,0,0,.5)]">
+                  🌿
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Only until she gets the idea — after the first one it's just nagging. */}
+      <p className="text-[11px] text-dbg-amber font-mono text-center h-4 animate-pulse">
+        {picked.length === 0 ? TABBOULEH.pick.hint : ""}
+      </p>
+
+      <style>{`
+        @keyframes bob {
+          0%, 100% { transform: translateY(0); }
+          50%      { transform: translateY(-3px); }
+        }
+      `}</style>
     </div>
   );
 }
