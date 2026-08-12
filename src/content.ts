@@ -100,9 +100,9 @@ export const BALANCES = [
  *  ACT II — the bug board
  * ------------------------------------------------------------------------- */
 
-export type TicketId = "BUG-1042" | "BUG-3011" | "BUG-0001";
+export type TicketId = "BUG-1042" | "BUG-3011" | "BUG-6001" | "BUG-0001";
 
-export type GameKind = "sleep" | "tabouleh" | "final";
+export type GameKind = "sleep" | "tabouleh" | "blackscreen" | "final";
 
 /** The finale. Stays locked until every other ticket on the board is closed. */
 export const FINAL_TICKET_ID = "BUG-0001" satisfies TicketId;
@@ -142,6 +142,14 @@ export const TICKETS: Ticket[] = [
     title: "TABBOULEHHH NOT FOUND",
     severity: "CRITICAL",
     game: "tabouleh",
+    resolution: "WONTFIX",
+    stampInGame: true,
+  },
+  {
+    id: "BUG-6001",
+    title: "Black screen l mawtttttttt",
+    severity: "CRITICAL",
+    game: "blackscreen",
     resolution: "WONTFIX",
     stampInGame: true,
   },
@@ -195,6 +203,33 @@ export const TABBOULEH = {
     text: "Ma fina na3mol l tabbouleh, l ba2dounes l 3el2anin ma bi addoo :((",
     aside: "(sorry ma elnelik 3anon)",
   },
+} as const;
+
+/**
+ * BUG-6001 — a real support ticket, worked by two people who love her and
+ * are both terrible at their jobs. The screen was auto-locking at 1 minute
+ * the whole time; neither of them ever checks Settings first.
+ */
+export const BLACKSCREEN = {
+  start: "OPEN TICKET",
+  field: {
+    text: "Field issue reported: A user's screen keeps going black after a while",
+    ms: 2600,
+  },
+  kevin: {
+    name: "KEVIN BRADLEY",
+    role: "Tier 1 Support",
+    text: "\"Reproduced. Screen: black. Rebooted the user's router just in case. Definitely a hardware issue.\"",
+    ms: 3200,
+  },
+  escalate: { text: "Escalating to SEAN O TAWIL…", ms: 1400 },
+  sean: {
+    name: "SEAN O TAWIL",
+    role: "Tier 2 Support",
+    text: "\"Reviewed Kevin's findings. Solar flare, most likely. Escalating to nobody.\"",
+    ms: 3200,
+  },
+  crashed: "Jessy crashed",
 } as const;
 
 /* ---------------------------------------------------------------------------

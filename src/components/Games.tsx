@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { SLEEP_ASSIST, TABBOULEH, type GameKind } from "@/content";
+import { BLACKSCREEN, SLEEP_ASSIST, TABBOULEH, type GameKind } from "@/content";
 import { haptic } from "@/lib/progress";
 import Placeholder from "./Placeholder";
 
 /**
- * Three micro-interactions are used by the board. Rules for every one of them:
+ * Four micro-interactions are used by the board. Rules for every one of them:
  *   - one thumb, portrait, under 60 seconds
  *   - no text input, no failure state, nothing can be answered "wrong"
  *   - `solved` is forced true by the parent on auto-solve, so every game must
@@ -26,6 +26,7 @@ export default function Game({
   switch (kind) {
     case "sleep": return <Sleep {...props} />;
     case "tabouleh": return <Tabouleh {...props} />;
+    case "blackscreen": return <BlackScreen {...props} />;
     case "final": return <Final {...props} />;
   }
 }
@@ -374,6 +375,112 @@ function Tabouleh({ solved, onSolve, resolution }: GameProps) {
         @keyframes bob {
           0%, 100% { transform: translateY(0); }
           50%      { transform: translateY(-3px); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------
+ *  BUG-6001 — Black screen. A real ticket, handed to the wrong two people.
+ *  Pure scripted playback — she just watches it fall apart.
+ * ---------------------------------------------------------------------- */
+type BSPhase = "idle" | "field" | "kevin" | "escalate" | "sean" | "crashed";
+const BS_PHASES: BSPhase[] = ["idle", "field", "kevin", "escalate", "sean", "crashed"];
+const BS_MS: Record<Exclude<BSPhase, "idle" | "crashed">, number> = {
+  field: BLACKSCREEN.field.ms,
+  kevin: BLACKSCREEN.kevin.ms,
+  escalate: BLACKSCREEN.escalate.ms,
+  sean: BLACKSCREEN.sean.ms,
+};
+
+function BlackScreen({ solved, onSolve, resolution }: GameProps) {
+  const [phase, setPhase] = useState<BSPhase>("idle");
+
+  // Every beat but the first and last advances on its own.
+  useEffect(() => {
+    if (phase === "idle" || phase === "crashed") return;
+    const t = setTimeout(
+      () => setPhase(BS_PHASES[BS_PHASES.indexOf(phase) + 1]),
+      BS_MS[phase],
+    );
+    return () => clearTimeout(t);
+  }, [phase]);
+
+  useEffect(() => {
+    if (phase !== "crashed" || solved) return;
+    haptic([50, 40, 50, 40, 90]);
+    onSolve();
+  }, [phase, solved, onSolve]);
+
+  if (solved || phase === "crashed") {
+    return (
+      <div className={`${panel} min-h-52 justify-center`}>
+        <span className="text-4xl">💥</span>
+        <p className="text-dbg-red font-mono font-bold text-xl text-center animate-[fadeUp_.3s_ease-out]">
+          {BLACKSCREEN.crashed}
+        </p>
+        {resolution && (
+          <span className="stamp text-dbg-green text-sm mt-1">{resolution}</span>
+        )}
+        <style>{`
+          @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: none; }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
+  if (phase === "idle") {
+    return (
+      <div className={`${panel} min-h-52 justify-center`}>
+        <span className="text-5xl">🎫</span>
+        <button
+          onClick={() => {
+            setPhase("field");
+            haptic(12);
+          }}
+          className="w-full border-2 border-dbg-green text-dbg-green font-mono text-sm py-3.5 min-h-12 active:bg-dbg-green/10"
+        >
+          {BLACKSCREEN.start}
+        </button>
+      </div>
+    );
+  }
+
+  const agent = phase === "kevin" ? BLACKSCREEN.kevin : phase === "sean" ? BLACKSCREEN.sean : null;
+
+  return (
+    <div className={`${panel} min-h-52 justify-center`}>
+      {phase === "field" && (
+        <p className="text-dbg-amber font-mono text-sm text-center leading-relaxed animate-[fadeUp_.3s_ease-out]">
+          {BLACKSCREEN.field.text}
+        </p>
+      )}
+
+      {phase === "escalate" && (
+        <p className="text-dbg-muted font-mono text-xs text-center animate-pulse">
+          {BLACKSCREEN.escalate.text}
+        </p>
+      )}
+
+      {agent && (
+        <div className="w-full flex flex-col items-center gap-2 animate-[fadeUp_.3s_ease-out]">
+          <p className="font-mono text-xs text-dbg-purple">
+            {agent.name} · {agent.role}
+          </p>
+          <p className="text-sm text-center leading-relaxed text-dbg-text/90">
+            {agent.text}
+          </p>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(8px); }
+          to   { opacity: 1; transform: none; }
         }
       `}</style>
     </div>
