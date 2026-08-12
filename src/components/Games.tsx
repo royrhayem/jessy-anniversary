@@ -186,8 +186,8 @@ function Scratch({ solved, onSolve }: GameProps) {
 
       <div className="relative w-full aspect-4/3 rounded overflow-hidden">
         <Placeholder
-          src="/kids-drawing.png"
-          label="Child's crayon drawing — see SPEC §18 #13"
+          src="/photos/kids-party.jpg"
+          label="Kids celebrating with balloons"
           className="absolute inset-0 w-full h-full"
         />
         {!done && (

@@ -54,5 +54,5 @@ export const PLACEHOLDER_IMAGES = [
   "/ticket-raise.png",
   "/tribute-bg.jpg",
   "/soap-flatlay.jpg",
-  "/kids-drawing.png",
+  "/photos/kids-party.jpg",
 ];
