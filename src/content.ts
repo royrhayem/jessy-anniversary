@@ -329,7 +329,8 @@ export const TRIBUTES: Tribute[] = [
     role: "Developer", // second-youngest
     photo: "/photos/team/raja.jpg",
     message:
-      "JESSSSSSSSYYYYYYYY Thank you ktsirrrr for everything you have done. 10 years of non stop work and catchinggggg bugsssss, Mobile hospital ken bado hospital law ma menikkkk." +
+      "JESSSSSSSSYYYYYYYY Thank you ktsirrrr for everything you have done.\n" +
+      "10 years of non stop work and catchinggggg bugsssss, Mobile hospital ken bado hospital law ma menikkkk.\n" +
       "NSHALLA ysir ma3ikkkk masareeee enough ma t3oudeee techteghleee bi hayetikkkk (PRINCESS TREATMENT).",
   },
   {

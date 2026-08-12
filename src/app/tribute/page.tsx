@@ -156,7 +156,7 @@ export default function Tribute() {
                       <p className="text-[11px] text-olive mt-1">{t.role}</p>
                     </figcaption>
                   </div>
-                  <blockquote className="mt-3 text-sm leading-relaxed text-ink/80">
+                  <blockquote className="mt-3 text-sm leading-relaxed text-ink/80 whitespace-pre-line">
                     {t.message}
                   </blockquote>
                 </figure>
