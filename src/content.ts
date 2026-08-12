@@ -291,9 +291,7 @@ export interface Stat {
 
 export const STATS: Stat[] = [
   { label: "days", value: 3650 },
-  { label: "bugs nobody else found", value: 4382 }, // TODO: a real-ish number
   { label: "hours of sleep", value: 0 },
-  { label: "bars of soap", value: 214 }, // TODO
   { label: "lunches with this team", value: 900 }, // TODO
 ];
 

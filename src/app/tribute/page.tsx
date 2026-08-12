@@ -29,7 +29,15 @@ function Ripple({ onDone }: { onDone: () => void }) {
   );
 }
 
-function Counter({ value, label }: { value: number; label: string }) {
+function Counter({
+  value,
+  label,
+  className = "",
+}: {
+  value: number;
+  label: string;
+  className?: string;
+}) {
   const [n, setN] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -55,7 +63,7 @@ function Counter({ value, label }: { value: number; label: string }) {
   }, [value]);
 
   return (
-    <div ref={ref} className="text-center">
+    <div ref={ref} className={`text-center ${className}`}>
       <p className="font-serif text-4xl text-deep tabular-nums">
         {n.toLocaleString()}
       </p>
@@ -86,8 +94,17 @@ export default function Tribute() {
               in numbers
             </h1>
             <div className="grid grid-cols-2 gap-8 pt-4">
-              {STATS.map((s) => (
-                <Counter key={s.label} value={s.value} label={s.label} />
+              {STATS.map((s, i) => (
+                <Counter
+                  key={s.label}
+                  value={s.value}
+                  label={s.label}
+                  className={
+                    STATS.length % 2 === 1 && i === STATS.length - 1
+                      ? "col-span-2"
+                      : undefined
+                  }
+                />
               ))}
             </div>
           </section>
