@@ -5,23 +5,22 @@ import Link from "next/link";
 import { CONFIG, STATS, THE_LINE, TIMELINE, TRIBUTES } from "@/content";
 import Placeholder from "@/components/Placeholder";
 
-/** The B→C transition: a water ripple wipe, tied to the beach. */
-function Ripple({ onDone }: { onDone: () => void }) {
+/** The B→C transition: a quick fade from the debug dark to the paper page. */
+function Fade({ onDone }: { onDone: () => void }) {
   useEffect(() => {
-    const t = setTimeout(onDone, 1400);
+    const t = setTimeout(onDone, 500);
     return () => clearTimeout(t);
   }, [onDone]);
   return (
-    <div className="fixed inset-0 z-50 bg-dbg-bg grid place-items-center pointer-events-none">
-      <div className="rounded-full bg-sand animate-[ripple_1.4s_ease-out_forwards]" />
+    <div className="fixed inset-0 z-50 bg-dbg-bg pointer-events-none animate-[fadeOut_.5s_ease-out_forwards]">
       <style>{`
-        @keyframes ripple {
-          from { width: 0; height: 0; opacity: 1; }
-          to   { width: 300vmax; height: 300vmax; opacity: 1; }
+        @keyframes fadeOut {
+          from { opacity: 1; }
+          to   { opacity: 0; }
         }
         @media (prefers-reduced-motion: reduce) {
-          .animate-\\[ripple_1\\.4s_ease-out_forwards\\] {
-            width: 300vmax; height: 300vmax;
+          .animate-\\[fadeOut_\\.5s_ease-out_forwards\\] {
+            opacity: 0;
           }
         }
       `}</style>
@@ -29,7 +28,15 @@ function Ripple({ onDone }: { onDone: () => void }) {
   );
 }
 
-function Counter({ value, label }: { value: number; label: string }) {
+function Counter({
+  value,
+  label,
+  className = "",
+}: {
+  value: number;
+  label: string;
+  className?: string;
+}) {
   const [n, setN] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -55,7 +62,7 @@ function Counter({ value, label }: { value: number; label: string }) {
   }, [value]);
 
   return (
-    <div ref={ref} className="text-center">
+    <div ref={ref} className={`text-center ${className}`}>
       <p className="font-serif text-4xl text-deep tabular-nums">
         {n.toLocaleString()}
       </p>
@@ -67,11 +74,11 @@ function Counter({ value, label }: { value: number; label: string }) {
 }
 
 export default function Tribute() {
-  const [wiping, setWiping] = useState(true);
+  const [fading, setFading] = useState(true);
 
   return (
     <>
-      {wiping && <Ripple onDone={() => setWiping(false)} />}
+      {fading && <Fade onDone={() => setFading(false)} />}
 
       <main className="hand paper min-h-dvh relative">
         <div className="relative z-2 px-6 py-16 max-w-lg mx-auto space-y-24">
@@ -86,8 +93,17 @@ export default function Tribute() {
               in numbers
             </h1>
             <div className="grid grid-cols-2 gap-8 pt-4">
-              {STATS.map((s) => (
-                <Counter key={s.label} value={s.value} label={s.label} />
+              {STATS.map((s, i) => (
+                <Counter
+                  key={s.label}
+                  value={s.value}
+                  label={s.label}
+                  className={
+                    STATS.length % 2 === 1 && i === STATS.length - 1
+                      ? "col-span-2"
+                      : undefined
+                  }
+                />
               ))}
             </div>
           </section>
@@ -97,16 +113,28 @@ export default function Tribute() {
             <h2 className="font-serif text-2xl text-deep text-center">
               The long version
             </h2>
-            <ol className="space-y-7 border-l-2 border-terracotta/30 pl-5">
-              {TIMELINE.map((t) => (
-                <li key={t.year} className="relative">
-                  <span className="absolute -left-[26px] top-1.5 h-2.5 w-2.5 rounded-full bg-terracotta" />
-                  <p className="font-mono text-xs text-sea">{t.year}</p>
-                  <p className="font-serif text-lg text-deep mt-0.5">{t.title}</p>
-                  <p className="text-sm leading-relaxed text-ink/75 mt-1">{t.body}</p>
-                </li>
-              ))}
-            </ol>
+            <div className="space-y-7">
+              <p className="font-mono text-xs text-sea pl-5">{CONFIG.startYear}</p>
+              <ol className="space-y-7 border-l-2 border-terracotta/30 pl-5">
+                {TIMELINE.map((t) => (
+                  <li key={t.title} className="relative">
+                    <span className="absolute -left-[26px] top-1.5 h-2.5 w-2.5 rounded-full bg-terracotta" />
+                    <p className="font-serif text-lg text-deep">{t.title}</p>
+                    {t.kind === "section" && (
+                      <ol className="mt-3 space-y-3 border-l border-sea/30 pl-4">
+                        {t.points.map((p) => (
+                          <li key={p.title} className="relative">
+                            <span className="absolute -left-[18px] top-1.5 h-1.5 w-1.5 rounded-full bg-sea" />
+                            <p className="font-serif text-base text-deep">{p.title}</p>
+                          </li>
+                        ))}
+                      </ol>
+                    )}
+                  </li>
+                ))}
+              </ol>
+              <p className="font-mono text-xs text-sea pl-5">{CONFIG.currentYear}</p>
+            </div>
           </section>
 
           {/* --- 3. The wall --- */}
@@ -144,7 +172,7 @@ export default function Tribute() {
                       <p className="text-[11px] text-olive mt-1">{t.role}</p>
                     </figcaption>
                   </div>
-                  <blockquote className="mt-3 text-sm leading-relaxed text-ink/80">
+                  <blockquote className="mt-3 text-sm leading-relaxed text-ink/80 whitespace-pre-line">
                     {t.message}
                   </blockquote>
                 </figure>

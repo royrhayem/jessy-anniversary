@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { CONFIG, TICKETS, type TicketId } from "@/content";
+import { CONFIG, FINAL_TICKET_ID, TICKETS, type TicketId } from "@/content";
 import { useProgress, haptic } from "@/lib/progress";
 import Game from "@/components/Games";
 
@@ -53,11 +53,11 @@ export default function TicketPage() {
     );
   }
 
-  const isFinal = ticket.id === "BUG-0001";
+  const isFinal = ticket.id === FINAL_TICKET_ID;
   const done = solved || alreadyClosed;
 
-  // BUG-0001 hands off to the tribute rather than back to the board.
-  const nextHref = isFinal ? "/tribute" : "/board";
+  // BUG-0001 hands off to the scratch transition rather than back to the board.
+  const nextHref = isFinal ? "/reveal" : "/board";
 
   return (
     <main className="dbg min-h-dvh flex flex-col pb-8">
@@ -76,31 +76,43 @@ export default function TicketPage() {
         <div>
           <h1 className="text-lg leading-snug">{ticket.title}</h1>
           <p className="mt-2 text-[11px] font-mono text-dbg-muted">
-            reported by {ticket.reporter} · priority {ticket.severity}
+            {ticket.reporter && `reported by ${ticket.reporter} · `}
+            priority {ticket.severity}
           </p>
         </div>
 
-        <div>
-          <p className="text-[11px] font-mono text-dbg-muted mb-1.5">
-            Steps to reproduce:
-          </p>
-          <ol className="text-sm space-y-1 list-decimal list-inside text-dbg-text/90">
-            {ticket.steps.map((s) => (
-              <li key={s}>{s}</li>
-            ))}
-          </ol>
-        </div>
-
-        {!done && (
-          <Game kind={ticket.game} solved={solved} onSolve={() => setSolved(true)} />
+        {ticket.steps && ticket.steps.length > 0 && (
+          <div>
+            <p className="text-[11px] font-mono text-dbg-muted mb-1.5">
+              Steps to reproduce:
+            </p>
+            <ol className="text-sm space-y-1 list-decimal list-inside text-dbg-text/90">
+              {ticket.steps.map((s) => (
+                <li key={s}>{s}</li>
+              ))}
+            </ol>
+          </div>
         )}
 
-        {done && (
+        {/* Games that stamp themselves stay put — their last frame is the
+            punchline, and replacing it with a panel would step on it. */}
+        {(!done || ticket.stampInGame) && (
+          <Game
+            kind={ticket.game}
+            solved={done}
+            resolution={ticket.resolution}
+            onSolve={() => setSolved(true)}
+          />
+        )}
+
+        {done && !ticket.stampInGame && (
           <div className="rounded-md border border-dbg-green/40 bg-dbg-green/5 p-5 flex flex-col items-center gap-4">
             <span className="stamp text-dbg-green text-sm">{ticket.resolution}</span>
-            <p className="text-sm text-center leading-relaxed text-dbg-text/90">
-              {ticket.closingNote}
-            </p>
+            {ticket.closingNote && (
+              <p className="text-sm text-center leading-relaxed text-dbg-text/90">
+                {ticket.closingNote}
+              </p>
+            )}
           </div>
         )}
 

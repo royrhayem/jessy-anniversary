@@ -109,29 +109,29 @@ export default function Gift() {
       <div className="relative z-2 mx-auto max-w-xl px-5 py-8 pb-12">
         <header className="space-y-5">
           <div className="flex items-center justify-between gap-3">
-            <span className="stamp text-terracotta text-[10px]">REWARD RECOVERY</span>
+            <span className="stamp text-terracotta text-[10px]">FINAL CHECKPOINT</span>
             <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-olive">
-              {completed.length}/3 recovered
+              {allDone ? "trail complete" : "something remains"}
             </span>
           </div>
 
           <div className="space-y-3">
             <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-sea">
-              BUG-0001 / FINAL DELIVERY
+              BUG-0001 / FINAL CHECKPOINT
             </p>
             <h1 className="font-serif text-[2.35rem] leading-[0.98] text-deep sm:text-5xl">
-              Three gifts.
+              A little something.
               <br />
-              <em>One slightly unnecessary quest.</em>
+              <em>And there’s more to uncover.</em>
             </h1>
             <p className="max-w-md text-sm leading-relaxed text-ink/70">
-              The portal still cannot express your value as money, so it has
-              converted the appreciation into a small delivery operation.
+              The portal has prepared a small surprise operation and would like
+              you to follow it to the end.
             </p>
           </div>
         </header>
 
-        <nav className="mt-8 grid grid-cols-3 gap-2" aria-label="Gift delivery steps">
+        <nav className="mt-8 grid grid-cols-2 gap-2" aria-label="Surprise trail">
           {REDEMPTION_GIFTS.map((item, index) => {
             const done = completed.includes(index);
             const unlocked = index <= activeStep || done;
@@ -151,11 +151,10 @@ export default function Gift() {
                 aria-current={index === activeStep ? "step" : undefined}
               >
                 <span className="flex items-center justify-between gap-1 font-mono text-[10px] text-sea">
-                  <span>0{index + 1}</span>
-                  <span aria-hidden>{done ? "✓" : unlocked ? "•" : "·"}</span>
+                  <span aria-hidden>{done ? "✓" : index === activeStep ? "•" : "·"}</span>
                 </span>
                 <span className="mt-1 block text-[11px] leading-tight text-deep">
-                  {item.kind === "digital" ? "reveal step 1" : `hidden gift ${index}`}
+                  {item.label}
                 </span>
               </button>
             );
@@ -175,7 +174,7 @@ export default function Gift() {
                   </h2>
                 </div>
                 <span className="text-3xl" aria-hidden>
-                  {isDigital ? "✦" : activeStep === 1 ? "🧭" : "📦"}
+                  {isDigital ? "✦" : "🧭"}
                 </span>
               </div>
               <p className="mt-3 text-sm leading-relaxed text-ink/70">{gift.teaser}</p>
@@ -189,12 +188,12 @@ export default function Gift() {
                   </div>
                   <div className="space-y-2">
                     <p className="font-serif text-xl text-deep">
-                      {isDigital ? "The evidence is ready." : "A clue is waiting."}
+                      {isDigital ? "A small surprise is ready." : "The trail continues."}
                     </p>
                     <p className="mx-auto max-w-xs text-sm leading-relaxed text-ink/65">
                       {isDigital
-                        ? "It is small, mysterious, and has passed absolutely no compliance review."
-                        : "We have hidden one actual object and are calling this a logistics department."}
+                        ? "A small surprise has made its way through the system."
+                        : "The trail leads away from the screen. Follow the clue to see where it takes you."}
                     </p>
                   </div>
                   <button
@@ -202,7 +201,7 @@ export default function Gift() {
                     onClick={revealGift}
                     className="w-full rounded-full bg-deep px-6 py-4 font-serif text-lg text-sand transition-transform active:scale-[0.98]"
                   >
-                    {isDigital ? "Open the evidence locker" : "Reveal the clue"} →
+                    {isDigital ? "Open the little mystery" : "Continue the trail"} →
                   </button>
                 </div>
               ) : isDigital ? (
@@ -220,12 +219,12 @@ export default function Gift() {
               <div className="border-t border-deep/10 bg-sand/60 px-5 py-5 sm:px-7">
                 <div className="flex flex-col items-center gap-4 text-center">
                   <span className="stamp text-sea text-[11px]">
-                    {completed.includes(activeStep) ? "RECOVERED" : "READY TO CLAIM"}
+                    {completed.includes(activeStep) ? "TRAIL COMPLETE" : "READY TO CONTINUE"}
                   </span>
                   <p className="max-w-sm text-sm leading-relaxed text-ink/70">
                     {isDigital
                       ? "Scan it, save it, and schedule the most professional disappearing act of your career."
-                      : "Go get it. The site will remain here, bravely holding the fort."}
+                      : "Go see what’s waiting there. The site will remain here, bravely holding the fort."}
                   </p>
                   <button
                     type="button"
@@ -233,11 +232,11 @@ export default function Gift() {
                     className="w-full rounded-full border-2 border-deep px-6 py-3.5 font-serif text-lg text-deep transition-transform active:scale-[0.98]"
                   >
                     {activeStep === REDEMPTION_GIFTS.length - 1
-                      ? "Mark the final boss defeated"
+                      ? "I found what was waiting →"
                       : completed.includes(activeStep)
-                        ? "Open the next gift"
+                        ? "Continue →"
                         : isDigital
-                          ? "I have the voucher →"
+                          ? "I’m ready for what’s next →"
                           : "I found it →"}
                   </button>
                 </div>
@@ -250,7 +249,7 @@ export default function Gift() {
 
         <footer className="mt-8 flex flex-col items-center gap-3 text-center">
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-olive">
-            delivery status: unexpectedly successful
+            trail status: unexpectedly successful
           </p>
           <Link href="/keepsake" className="text-sm text-sea underline decoration-sea/40 underline-offset-4">
             Keep the certificate for later →
@@ -276,11 +275,11 @@ function DigitalGift({ voucherUrl }: { voucherUrl: string }) {
           scan to unlock: spa mode
         </p>
         <h3 className="font-serif text-2xl leading-tight text-deep">
-          You have been cleared for one guilt-free reset.
+          You have been cleared for a guilt-free reset.
         </h3>
         <p className="text-sm leading-relaxed text-ink/70">
           Ask a teammate&apos;s phone to scan this screen. Yes, the voucher has a
-          two-device dependency. It was tested in production.
+          delightfully unnecessary device dependency. It was tested in production.
         </p>
         {voucherUrl ? (
           <a
@@ -352,14 +351,14 @@ function Completion() {
         🫧
       </div>
       <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.2em] text-sea">
-        all gifts recovered
+        everything accounted for
       </p>
       <h2 className="mt-2 font-serif text-3xl leading-tight text-deep">
         Case closed. Appreciation delivered.
       </h2>
       <p className="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-ink/70">
-        One digital reset, two physical side quests, and absolutely no monetary
-        value whatsoever. A perfect RewardHub™ outcome.
+        You followed the trail, found what was waiting, and somehow survived the
+        final checkpoint. A perfect RewardHub™ outcome.
       </p>
       <Link
         href="/keepsake"

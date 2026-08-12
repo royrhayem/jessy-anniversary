@@ -12,11 +12,14 @@ export default function Placeholder({
   label,
   className = "",
   rounded = false,
+  fit = "cover",
 }: {
   src: string | null;
   label: string;
   className?: string;
   rounded?: boolean;
+  /** "contain" for screenshots and anything with text that must not crop. */
+  fit?: "cover" | "contain";
 }) {
   const [failed, setFailed] = useState(false);
 
@@ -27,7 +30,8 @@ export default function Placeholder({
         src={src}
         alt={label}
         onError={() => setFailed(true)}
-        className={`object-cover ${rounded ? "rounded-full" : ""} ${className}`}
+        style={{ objectFit: fit }}
+        className={`${rounded ? "rounded-full" : ""} ${className}`}
       />
     );
   }
@@ -49,10 +53,6 @@ export default function Placeholder({
 
 /** Warmed during the landing spinner so nothing waits on office wifi later. */
 export const PLACEHOLDER_IMAGES = [
-  "/corporate-hero.jpg",
-  "/ticket-soap.png",
-  "/ticket-raise.png",
-  "/tribute-bg.jpg",
-  "/soap-flatlay.jpg",
-  "/photos/kids-party.jpg",
+  "/corporate-hero.jpeg",
+  "/chatgpt-sleep.png",
 ];

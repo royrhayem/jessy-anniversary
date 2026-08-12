@@ -3,7 +3,7 @@
 import {
   createContext, useCallback, useContext, useEffect, useMemo, useState,
 } from "react";
-import { TICKETS, type TicketId } from "@/content";
+import { FINAL_TICKET_ID, TICKETS, type TicketId } from "@/content";
 
 // The ticket set is intentionally shorter than the original ten-ticket flow.
 // Bump the key so an old run cannot leave removed tickets marked as closed.
@@ -20,15 +20,19 @@ interface ProgressApi extends ProgressState {
   close: (id: TicketId) => void;
   reset: () => void;
   setSound: (on: boolean) => void;
-  /** All playable tickets except BUG-0001. */
+  /** Tickets still open on the board. */
   openCount: number;
   allButFinalClosed: boolean;
 }
 
 const Ctx = createContext<ProgressApi | null>(null);
 
-/** BUG-0001 is excluded — it unlocks only once the four playable tickets close. */
-const NORMAL_TICKET_COUNT = TICKETS.filter((ticket) => ticket.id !== "BUG-0001").length;
+/**
+ * Derived from the board, not hardcoded — tickets get added and dropped right
+ * up to the day itself, and the gate must follow. BUG-0001 is excluded: it
+ * unlocks only once every other ticket is closed.
+ */
+const NORMAL_TICKETS = TICKETS.filter((t) => t.id !== FINAL_TICKET_ID);
 
 export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<ProgressState>({ closed: [], soundOn: false });
@@ -63,7 +67,9 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const setSound = useCallback((on: boolean) => setState((s) => ({ ...s, soundOn: on })), []);
 
   const api = useMemo<ProgressApi>(() => {
-    const normalClosed = state.closed.filter((id) => id !== "BUG-0001").length;
+    // Ignore ids left in localStorage by an older version of the board.
+    const onBoard = TICKETS.filter((t) => state.closed.includes(t.id));
+    const normalClosed = onBoard.filter((t) => t.id !== FINAL_TICKET_ID).length;
     return {
       ...state,
       ready,
@@ -71,8 +77,8 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       close,
       reset,
       setSound,
-      openCount: NORMAL_TICKET_COUNT + 1 - state.closed.length,
-      allButFinalClosed: normalClosed >= NORMAL_TICKET_COUNT,
+      openCount: TICKETS.length - onBoard.length,
+      allButFinalClosed: normalClosed >= NORMAL_TICKETS.length,
     };
   }, [state, ready, close, reset, setSound]);
 

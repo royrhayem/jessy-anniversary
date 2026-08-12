@@ -11,7 +11,7 @@
 export type GiftKind = "digital" | "physical";
 
 export interface RedemptionGift {
-  key: "spa" | "physical-one" | "physical-two";
+  key: "spa" | "physical";
   kind: GiftKind;
   label: string;
   title: string;
@@ -52,33 +52,24 @@ export const CONFIG = {
   spaVoucherUrl: "/spa-voucher.pdf" as string | null,
 } as const;
 
-/** Copy and hiding places for the three-part ending. Update these on the day. */
+/** Copy and hiding place for the two-step ending. Update these on the day. */
 export const REDEMPTION_GIFTS = [
   {
     key: "spa",
     kind: "digital",
-    label: "REVEAL / 01",
-    title: "Step one: open the mystery file",
-    teaser: "The first delivery is ready. Small, suspiciously deserved, and definitely not cash.",
-    clue: "Scan the evidence. Then book an afternoon where nobody can find you.",
+    label: "A LITTLE SOMETHING",
+    title: "A small surprise is ready.",
+    teaser: "It has made its way through the system and passed absolutely no compliance review.",
+    clue: "Open what is waiting, then make a little time for yourself.",
   },
   {
-    key: "physical-one",
+    key: "physical",
     kind: "physical",
-    label: "PHYSICAL / 02",
-    title: "The one that refused to be an app",
-    teaser: "A real object, hidden in the real world. Extremely inconvenient.",
-    clue: "Where the things you make begin.",
-    location: "The kitchen — top shelf, behind the mugs.",
-  },
-  {
-    key: "physical-two",
-    kind: "physical",
-    label: "PHYSICAL / 03",
-    title: "The final boss of appreciation",
-    teaser: "One last side quest. Please leave the screen to collect it.",
-    clue: "Where abandoned cables, big ideas, and suspiciously nice things gather.",
-    location: "TODO: set the hiding place for physical gift #2.",
+    label: "MORE TO UNCOVER",
+    title: "The trail continues.",
+    teaser: "This part leads away from the screen. Follow the clue and see where it takes you.",
+    clue: "Where it all started.",
+    location: "Jessy's old office, the old devices QA room.",
   },
 ] as const satisfies readonly RedemptionGift[];
 
@@ -94,114 +85,200 @@ export const SPA_VOUCHER = {
 } as const;
 
 /* ---------------------------------------------------------------------------
- *  ACT I — the escalating balance gag
+ *  ACT I — the rage meter gag
  * ------------------------------------------------------------------------- */
 
-export const BALANCES = [
-  { value: "$0.00", note: null },
-  { value: "3.00 EGP", note: "Recalculating…" },
-  { value: "1 × bar of soap", note: "handmade, artisanal" },
-  { value: "4 hours of sleep", note: "EXPIRED" },
-  { value: "NaN", note: "FATAL" },
+export const RAGE_STAGES = [
+  { value: "0%", note: null, fill: 6, label: "Simmering" },
+  { value: "27%", note: "getting warmer", fill: 27, label: "Heating up" },
+  { value: "58%", note: "raised voices detected", fill: 58, label: "Boiling over" },
+  { value: "91%", note: "ABOUT TO SNAP", fill: 91, label: "Redlining" },
+  { value: "JESSY 3AM TENHAR", note: "OVERFLOW", fill: 100, label: "OVERFLOWED" },
 ] as const;
 
 /* ---------------------------------------------------------------------------
  *  ACT II — the bug board
  * ------------------------------------------------------------------------- */
 
-export type TicketId =
-  | "BUG-5006" | "BUG-6120" | "BUG-8001" | "BUG-9002" | "BUG-0001";
+export type TicketId = "BUG-1042" | "BUG-3011" | "BUG-6001" | "BUG-4141" | "BUG-0001";
 
-export type GameKind =
-  | "bubbles" | "teamcode" | "scratch" | "raise" | "final";
+export type GameKind = "sleep" | "tabouleh" | "blackscreen" | "favorite" | "million";
+
+/** The finale. Stays locked until every other ticket on the board is closed. */
+export const FINAL_TICKET_ID = "BUG-0001" satisfies TicketId;
 
 export interface Ticket {
   id: TicketId;
   title: string;
-  reporter: string;
+  /** Omit to hide the "reported by" line entirely. */
+  reporter?: string;
   severity: string;
-  steps: string[];
+  /** Omit to drop the "steps to reproduce" block entirely. */
+  steps?: string[];
   game: GameKind;
   resolution: string;
-  /** Shown after the interaction completes. The punchline. */
-  closingNote: string;
+  /** Shown after the interaction completes. The punchline. Optional. */
+  closingNote?: string;
+  /**
+   * The game stamps the resolution itself and stays on screen once closed —
+   * no separate closing panel. For tickets whose punchline IS the last frame
+   * of the interaction.
+   */
+  stampInGame?: boolean;
 }
 
-/** Four playable tickets, followed by the locked appreciation reveal. */
+/** Two playable tickets, followed by the locked appreciation reveal. */
 export const TICKETS: Ticket[] = [
   {
-    id: "BUG-5006",
-    title: "Excess soap detected in production",
-    reporter: "Raja",
-    severity: "P2",
-    steps: [
-      "Leave Jessy alone with oils and lye",
-      "Observe",
-      "The entire office now smells like lavender",
-    ],
-    game: "bubbles",
-    resolution: "FIXED",
-    closingNote: "Cleaned up. Literally.",
-  },
-  {
-    id: "BUG-6120",
-    title: "Cannot verify user belongs to a real team",
-    reporter: "RewardHub™ Security",
-    severity: "BLOCKER",
-    steps: [
-      "Query team membership",
-      "Receive: unverified",
-      "Escalate to human beings",
-    ],
-    game: "teamcode",
-    resolution: "VERIFIED",
-    closingNote: "Team confirmed. All four of them. Loudly.",
-  },
-  {
-    id: "BUG-8001",
-    title: "Unauthorized art project detected in kids' room",
-    reporter: "Roy",
-    severity: "P0",
-    steps: [
-      "Have an idea at 11pm",
-      "Do not sleep (see BUG-1042)",
-      "By morning it exists",
-    ],
-    game: "scratch",
-    resolution: "APPROVED",
-    closingNote: "Approved without review. Ship it.",
-  },
-  {
-    id: "BUG-9002",
-    title: "User requires funds in order to terminate employment",
-    reporter: "Hadil",
+    id: "BUG-1042",
+    title: "Jessy ma betnem",
     severity: "CRITICAL",
-    steps: [
-      "Request raise",
-      "Request raise again",
-      "Consider the beach",
-    ],
-    game: "raise",
+    game: "sleep",
     resolution: "WONTFIX",
-    closingNote:
-      "Request received. Request understood. Request forwarded to a department " +
-      "that does not exist. Closing as WONTFIX. We are so sorry.",
+    stampInGame: true,
+  },
+  {
+    id: "BUG-3011",
+    title: "TABBOULEHHH NOT FOUND",
+    severity: "CRITICAL",
+    game: "tabouleh",
+    resolution: "WONTFIX",
+    stampInGame: true,
+  },
+  {
+    id: "BUG-6001",
+    title: "Black screen l mawtttttttt",
+    severity: "CRITICAL",
+    game: "blackscreen",
+    resolution: "WONTFIX",
+    stampInGame: true,
+  },
+  {
+    id: "BUG-4141",
+    title: "FAVORITE COWORKER NOT FOUND",
+    severity: "CRITICAL",
+    game: "favorite",
+    resolution: "WONTFIX",
+    stampInGame: true,
   },
   {
     id: "BUG-0001",
-    title: "User does not know how much this team appreciates her",
-    reporter: "Everyone",
-    severity: "BLOCKER",
-    steps: [
-      "Observe her for ten years",
-      "Attempt to say it out loud",
-      "Fail every time",
-    ],
-    game: "final",
-    resolution: "CANNOT REPRODUCE",
-    closingNote: "Because it was never a bug.",
+    title: "retirement.exe: INSUFFICIENT FUNDS",
+    severity: "CRITICAL",
+    game: "million",
+    resolution: "WONTFIX",
+    stampInGame: true,
   },
 ];
+
+/**
+ * BUG-1042 — what happens once she has run out of snoozes. The site offers to
+ * help, asks ChatGPT, thinks about it, and comes back with the verdict.
+ * Each step's `ms` is how long it stays on screen before the next one.
+ */
+export const SLEEP_ASSIST = {
+  offer: { text: "khalina nse3dik", ms: 1600 },
+  asking: { label: "asking chatgpt…", ms: 1200 },
+  /** She reads the question, then sends it herself — no timer on this step. */
+  ask: {
+    image: "/chatgpt-sleep.png",
+    imageLabel: "Screenshot: asking ChatGPT how Jessy can sleep 8 hours",
+    button: "SEND ↑",
+  },
+  thinking: { label: "analyzing sleep patterns…", ms: 2600 },
+  /** The last frame. The ticket is stamped here and stays put. */
+  verdict: { text: "KIZBIII KBIRIIIII MA FIKEEEE TNEME 8 se3et bi 3 se3et" },
+} as const;
+
+/**
+ * BUG-3011 — she asks for tabbouleh, the kitchen starts, and then remembers
+ * the one time the parsley stayed in her teeth all afternoon.
+ */
+export const TABBOULEH = {
+  start: "PREPARE TABBOULEH",
+  /** Three sprigs stuck in her teeth. She picks them out one by one. */
+  pick: {
+    count: 3,
+    label: "parsley stuck",
+    hint: "chile l ba2dounes men snenik 🌿",
+  },
+  verdict: {
+    text: "Ma fina na3mol l tabbouleh, l ba2dounes l 3el2anin ma bi addoo :((",
+    aside: "(sorry ma elnelik 3anon)",
+  },
+} as const;
+
+/**
+ * BUG-6001 — a real support ticket, worked by two people who love her and
+ * are both terrible at their jobs. The screen was auto-locking at 1 minute
+ * the whole time; neither of them ever checks Settings first.
+ */
+export const BLACKSCREEN = {
+  start: "OPEN TICKET",
+  field: {
+    text: "Field issue reported: A user's screen keeps going black after a while",
+    ms: 2600,
+  },
+  kevin: {
+    name: "KEVIN BRADLEY",
+    role: "Tier 1 Support",
+    text:
+      "\"Tried to disconnect and reconnect the smart reader, but the issue " +
+      "is still happening.\"",
+    ms: 3200,
+  },
+  escalate: { text: "Escalating to SEAN O TAWIL…", ms: 1400 },
+  sean: {
+    name: "SEAN O TAWIL",
+    role: "Tier 2 Support",
+    text: "\"How does mobile hospital even work ?\"",
+    ms: 3000,
+  },
+  crashed: "Jessy crashed",
+} as const;
+
+/**
+ * BUG-4141 — pick a favorite coworker. Everyone dodges the tap except one —
+ * the one answer she'd never actually give out loud.
+ */
+export const FAVORITE = {
+  /** Order shown on screen. The last name is the only one that holds still. */
+  coworkers: ["Roy", "Nathalie", "Hadil", "Raja", "Priyal"],
+  correct: "Priyal",
+  verdict: {
+    arabic: "سكين الغدر 🔪",
+    latin: "Kenna 3erfin bethebiya aktar menaaa",
+  },
+} as const;
+
+/**
+ * BUG-0001 — the finale. She chases the retirement fantasy, gets shut down
+ * twice, gets told the dream is far away, and then gets the truth.
+ */
+export const MILLION = {
+  button: "WIN MILLION DOLLAR",
+  maxTries: 3,
+  /** Shown as a native alert on the first tries — a system, not the team, saying no. */
+  tryAgain: "MABIIII DOLLAR, TRY AGAIN",
+  ragebait: { text: "Sorry helm l dalell wel princess treatment b3idddd", ms: 2600 },
+  verdict: "Nehna aslan menhebiik KTSIRRR KTSIRRRR w mamnou3 tfele :)",
+} as const;
+
+/**
+ * The scratch transition — between the bug board closing and the tribute
+ * opening. She reads the line, then scratches to find out who "them" is:
+ * a photo of her two kids, mid-celebration.
+ */
+export const REVEAL = {
+  message:
+    "Zedneha ktirrr w ma badna nmout, fa hala2 ha ntare l ajwe2 bi aktar " +
+    "chakhsen bethebiyonn bi hayetik",
+  messageMs: 3800,
+  photo: "/photos/kids-party.jpg",
+  photoLabel: "The two people she loves most",
+  prompt: "scratch to reveal",
+  revealedNote: "Approved without review. Ship it.",
+} as const;
 
 /* ---------------------------------------------------------------------------
  *  ACT III — the tribute
@@ -215,9 +292,7 @@ export interface Stat {
 
 export const STATS: Stat[] = [
   { label: "days", value: 3650 },
-  { label: "bugs nobody else found", value: 4382 }, // TODO: a real-ish number
   { label: "hours of sleep", value: 0 },
-  { label: "bars of soap", value: 214 }, // TODO
   { label: "lunches with this team", value: 900 }, // TODO
 ];
 
@@ -253,33 +328,58 @@ export const TRIBUTES: Tribute[] = [
     role: "Developer", // second-youngest
     photo: "/photos/team/raja.jpg",
     message:
-      "Kebous bugs " +
-      "Happy anniversary!",
+      "JESSSSSSSSYYYYYYYY Thank you ktsirrrr for everything you have done." +
+      " 10 years of non stop work and catchinggggg bugsssss, Mobile hospital ken bado hospital law ma menikkkk.\n" +
+      "NSHALLA ysir ma3ikkkk masareeee enough ma t3oudeee techteghleee bi hayetikkkk (PRINCESS TREATMENT).",
   },
   {
     name: "Roy",
     role: "Developer",
     photo: "/photos/team/roy.jpg",
     message:
-      "From 1 yearS to 10 years.. " +
-      "Happy anniversary!",
+      "For multiple year, you haven’t allowed even 1 bugs to slip past 1 fingers " +
+      "of yours, not even 1 pixels, 1 unnecessary S’s, 1 expired items, or 1 recalled products. " +
+      "Every single 1 becomes a bug. Happy anniversary to the QA queen who never lets 1 details escapes!",
   },
 ];
 
-export interface TimelineEntry {
-  year: number;
+export interface TimelinePoint {
   title: string;
-  body: string;
-  photo?: string | null;
 }
 
+/**
+ * A top-level beat: a single milestone, or a "section" that groups several
+ * sub-points under one heading (e.g. an era with a few defining moments).
+ */
+export type TimelineEntry =
+  | { kind: "event"; title: string }
+  | { kind: "section"; title: string; points: TimelinePoint[] };
+
+/**
+ * The timeline no longer stamps a year on every entry — only the start and
+ * end years (CONFIG.startYear / CONFIG.currentYear) bookend it.
+ */
 export const TIMELINE: TimelineEntry[] = [
-  { year: 2016, title: "Day one", body: "TODO: what do you remember about her first week?" },
-  { year: 2018, title: "TODO", body: "TODO: a moment, a release, a disaster she caught." },
-  { year: 2020, title: "TODO", body: "TODO." },
-  { year: 2022, title: "TODO", body: "TODO." },
-  { year: 2024, title: "TODO", body: "TODO." },
-  { year: 2026, title: "Ten years", body: "TODO: and here we are." },
+  { kind: "event", title: "Jessy joined WaveMark" },
+  {
+    kind: "section",
+    title: "The Dark Ages",
+    points: [
+      { title: "Surviving Taline" },
+      { title: "Surviving Ahmad Jichi" },
+    ],
+  },
+  {
+    kind: "section",
+    title: "Mobile Hospital transition",
+    points: [
+      { title: "0 EPR" },
+      { title: "Carrying iOS and Android Mobile Hospital testing alone" },
+      { title: "Catalon automation" },
+      { title: "Inventory Health Spotlight. Ma 3am tethadaaa jessyy ma3 l ai :)" },
+    ],
+  },
+  { kind: "event", title: "And the list goes on and onnnnnnnnn" },
 ];
 
 /** One screen. One sentence. No ornament. Make this one count. */

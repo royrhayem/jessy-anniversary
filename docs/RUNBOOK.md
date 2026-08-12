@@ -18,7 +18,7 @@ Search for `TODO`.
 | Timeline entries | `TIMELINE` |
 | Stats | `STATS` |
 | **The final line** | `THE_LINE` ← the one that matters most |
-| **Three gift copy + locations** | `REDEMPTION_GIFTS` |
+| **Surprise trail copy + location** | `REDEMPTION_GIFTS` |
 | **Spa voucher copy** | `SPA_VOUCHER` |
 | **Spa QR destination** | `CONFIG.spaVoucherUrl` — currently `/spa-voucher.pdf` |
 
@@ -94,7 +94,7 @@ Not linked from anywhere in the experience.
 |---|---|---|
 | I | Landing (incl. 3.5s fake spinner) | ~40s |
 | I | Code entry | ~30s |
-| I | Balance gag | ~60s |
+| I | Rage meter gag | ~60s |
 | II | Crash / role flip | ~35s |
 | II | Four tickets + final reveal | ~2 min |
 | III | Tribute scroll | ~90s |
@@ -122,7 +122,7 @@ The design rule is: **she must never be stuck in front of an audience.**
 ## 8. Day-of checklist
 
 - [ ] All `TODO`s in `content.ts` replaced
-- [ ] Both physical hiding places in `REDEMPTION_GIFTS` set to the real locations
+- [ ] Both physical gifts hidden together in the real location from `REDEMPTION_GIFTS`
 - [ ] `SPA_VOUCHER` copy and `CONFIG.spaVoucherUrl` checked
 - [ ] Redeployed and verified after the final content change
 - [ ] Ran the whole flow on **her phone model**, on **office wifi**

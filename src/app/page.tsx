@@ -45,7 +45,7 @@ export default function Landing() {
 
       <div className="flex-1 px-5 py-6 flex flex-col items-center text-center">
         <Placeholder
-          src="/corporate-hero.jpg"
+          src="/corporate-hero.jpeg"
           label="Stock photo: four colleagues high-fiving"
           className="w-full aspect-video mb-6 border border-corp-border"
         />
