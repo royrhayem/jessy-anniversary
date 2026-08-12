@@ -102,7 +102,7 @@ export const BALANCES = [
 
 export type TicketId = "BUG-1042" | "BUG-3011" | "BUG-6001" | "BUG-4141" | "BUG-0001";
 
-export type GameKind = "sleep" | "tabouleh" | "blackscreen" | "favorite" | "final";
+export type GameKind = "sleep" | "tabouleh" | "blackscreen" | "favorite" | "million";
 
 /** The finale. Stays locked until every other ticket on the board is closed. */
 export const FINAL_TICKET_ID = "BUG-0001" satisfies TicketId;
@@ -163,17 +163,11 @@ export const TICKETS: Ticket[] = [
   },
   {
     id: "BUG-0001",
-    title: "User does not know how much this team appreciates her",
-    reporter: "Everyone",
-    severity: "BLOCKER",
-    steps: [
-      "Observe her for ten years",
-      "Attempt to say it out loud",
-      "Fail every time",
-    ],
-    game: "final",
-    resolution: "CANNOT REPRODUCE",
-    closingNote: "Because it was never a bug.",
+    title: "retirement.exe: INSUFFICIENT FUNDS",
+    severity: "CRITICAL",
+    game: "million",
+    resolution: "WONTFIX",
+    stampInGame: true,
   },
 ];
 
@@ -254,6 +248,19 @@ export const FAVORITE = {
     arabic: "سكين الغدر 🔪",
     latin: "Kenna 3erfin bethebiya aktar menaaa",
   },
+} as const;
+
+/**
+ * BUG-0001 — the finale. She chases the retirement fantasy, gets shut down
+ * twice, gets told the dream is far away, and then gets the truth.
+ */
+export const MILLION = {
+  button: "WIN MILLION DOLLAR",
+  maxTries: 3,
+  /** Shown as a native alert on the first tries — a system, not the team, saying no. */
+  tryAgain: "MABIIII DOLLAR, TRY AGAIN",
+  ragebait: { text: "Sorry helm l dalell wel princess treatment b3idddd", ms: 2600 },
+  verdict: "Nehna aslan menhebiik KTSIRRR KTSIRRRR w mamnou3 tfele :)",
 } as const;
 
 /* ---------------------------------------------------------------------------

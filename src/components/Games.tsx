@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { BLACKSCREEN, FAVORITE, SLEEP_ASSIST, TABBOULEH, type GameKind } from "@/content";
+import { BLACKSCREEN, FAVORITE, MILLION, SLEEP_ASSIST, TABBOULEH, type GameKind } from "@/content";
 import { haptic } from "@/lib/progress";
 import Placeholder from "./Placeholder";
 
@@ -28,7 +28,7 @@ export default function Game({
     case "tabouleh": return <Tabouleh {...props} />;
     case "blackscreen": return <BlackScreen {...props} />;
     case "favorite": return <Favorite {...props} />;
-    case "final": return <Final {...props} />;
+    case "million": return <Million {...props} />;
   }
 }
 
@@ -589,55 +589,86 @@ function Favorite({ solved, onSolve, resolution }: GameProps) {
 }
 
 /* -------------------------------------------------------------------------
- *  BUG-0001 — No button works. Only one resolution is selectable.
+ *  BUG-0001 — The finale. Three tries at a million dollars, a ragebait
+ *  beat, then the truth.
  * ---------------------------------------------------------------------- */
-const RESOLUTIONS = ["FIXED", "WONTFIX", "DUPLICATE", "CANNOT REPRODUCE"];
+type MillionPhase = "idle" | "ragebait" | "verdict";
 
-function Final({ solved, onSolve }: GameProps) {
-  const [nudged, setNudged] = useState<string | null>(null);
+function Million({ solved, onSolve, resolution }: GameProps) {
+  const [tries, setTries] = useState(0);
+  const [phase, setPhase] = useState<MillionPhase>("idle");
+
+  function click() {
+    haptic(12);
+    const next = tries + 1;
+    setTries(next);
+    if (next < MILLION.maxTries) {
+      // A blunt system "no" — not the team's, the button's.
+      alert(MILLION.tryAgain);
+    } else {
+      setPhase("ragebait");
+    }
+  }
+
+  useEffect(() => {
+    if (phase !== "ragebait") return;
+    const t = setTimeout(() => setPhase("verdict"), MILLION.ragebait.ms);
+    return () => clearTimeout(t);
+  }, [phase]);
+
+  useEffect(() => {
+    if (phase !== "verdict" || solved) return;
+    haptic([30, 50, 30, 50, 70]);
+    onSolve();
+  }, [phase, solved, onSolve]);
+
+  if (solved || phase === "verdict") {
+    return (
+      <div className={`${panel} min-h-52 justify-center`}>
+        <p className="text-dbg-amber font-mono font-bold text-lg leading-relaxed text-center animate-[fadeUp_.3s_ease-out]">
+          {MILLION.verdict}
+        </p>
+        {resolution && (
+          <span className="stamp text-dbg-green text-sm mt-1">{resolution}</span>
+        )}
+        <style>{`
+          @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: none; }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
+  if (phase === "ragebait") {
+    return (
+      <div className={`${panel} min-h-52 justify-center`}>
+        <p className="text-dbg-red font-mono text-sm leading-relaxed text-center animate-[fadeUp_.3s_ease-out]">
+          {MILLION.ragebait.text}
+        </p>
+        <style>{`
+          @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: none; }
+          }
+        `}</style>
+      </div>
+    );
+  }
 
   return (
-    <div className={panel}>
-      <p className="text-xs text-dbg-muted font-mono">select a resolution</p>
-
-      <div className="grid grid-cols-1 gap-2 w-full">
-        {RESOLUTIONS.map((r) => {
-          const real = r === "CANNOT REPRODUCE";
-          return (
-            <button
-              key={r}
-              onClick={() => {
-                if (real) {
-                  haptic([30, 60, 30]);
-                  onSolve();
-                } else {
-                  setNudged(r);
-                  haptic(20);
-                }
-              }}
-              className={`rounded border-2 py-3.5 min-h-12 font-mono text-sm transition-all ${
-                real
-                  ? "border-dbg-green text-dbg-green"
-                  : "border-dbg-line text-dbg-muted"
-              } ${nudged === r ? "animate-[shake_.3s]" : ""}`}
-            >
-              {r}
-            </button>
-          );
-        })}
-      </div>
-
-      <p className="text-[11px] text-dbg-muted font-mono h-4" aria-live="polite">
-        {nudged && "That one isn't true."}
+    <div className={`${panel} min-h-52 justify-center`}>
+      <span className="text-5xl">💰</span>
+      <button
+        onClick={click}
+        className="w-full border-2 border-dbg-green text-dbg-green font-mono text-sm py-3.5 min-h-12 active:bg-dbg-green/10"
+      >
+        {MILLION.button}
+      </button>
+      <p className="text-[11px] text-dbg-muted font-mono">
+        attempt {tries}/{MILLION.maxTries}
       </p>
-
-      <style>{`
-        @keyframes shake {
-          0%,100% { transform: translateX(0); }
-          25% { transform: translateX(-6px); }
-          75% { transform: translateX(6px); }
-        }
-      `}</style>
     </div>
   );
 }
