@@ -343,20 +343,42 @@ export const TRIBUTES: Tribute[] = [
   },
 ];
 
-export interface TimelineEntry {
-  year: number;
+export interface TimelinePoint {
   title: string;
-  body: string;
-  photo?: string | null;
 }
 
+/**
+ * A top-level beat: a single milestone, or a "section" that groups several
+ * sub-points under one heading (e.g. an era with a few defining moments).
+ */
+export type TimelineEntry =
+  | { kind: "event"; title: string }
+  | { kind: "section"; title: string; points: TimelinePoint[] };
+
+/**
+ * The timeline no longer stamps a year on every entry — only the start and
+ * end years (CONFIG.startYear / CONFIG.currentYear) bookend it.
+ */
 export const TIMELINE: TimelineEntry[] = [
-  { year: 2016, title: "Day one", body: "TODO: what do you remember about her first week?" },
-  { year: 2018, title: "TODO", body: "TODO: a moment, a release, a disaster she caught." },
-  { year: 2020, title: "TODO", body: "TODO." },
-  { year: 2022, title: "TODO", body: "TODO." },
-  { year: 2024, title: "TODO", body: "TODO." },
-  { year: 2026, title: "Ten years", body: "TODO: and here we are." },
+  { kind: "event", title: "Jessy joined WaveMark" },
+  {
+    kind: "section",
+    title: "The Dark Ages",
+    points: [
+      { title: "Surviving Taline" },
+      { title: "Surviving Ahmad Jichi" },
+    ],
+  },
+  {
+    kind: "section",
+    title: "Mobile Hospital Testing transition",
+    points: [
+      { title: "0 EPR" },
+      { title: "Carrying iOS and Android Mobile Hospital alone" },
+      { title: "Catalon automation" },
+    ],
+  },
+  { kind: "event", title: "And the list goes on and onnnnnnnnn" },
 ];
 
 /** One screen. One sentence. No ornament. Make this one count. */

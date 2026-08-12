@@ -97,16 +97,28 @@ export default function Tribute() {
             <h2 className="font-serif text-2xl text-deep text-center">
               The long version
             </h2>
-            <ol className="space-y-7 border-l-2 border-terracotta/30 pl-5">
-              {TIMELINE.map((t) => (
-                <li key={t.year} className="relative">
-                  <span className="absolute -left-[26px] top-1.5 h-2.5 w-2.5 rounded-full bg-terracotta" />
-                  <p className="font-mono text-xs text-sea">{t.year}</p>
-                  <p className="font-serif text-lg text-deep mt-0.5">{t.title}</p>
-                  <p className="text-sm leading-relaxed text-ink/75 mt-1">{t.body}</p>
-                </li>
-              ))}
-            </ol>
+            <div className="space-y-7">
+              <p className="font-mono text-xs text-sea pl-5">{CONFIG.startYear}</p>
+              <ol className="space-y-7 border-l-2 border-terracotta/30 pl-5">
+                {TIMELINE.map((t) => (
+                  <li key={t.title} className="relative">
+                    <span className="absolute -left-[26px] top-1.5 h-2.5 w-2.5 rounded-full bg-terracotta" />
+                    <p className="font-serif text-lg text-deep">{t.title}</p>
+                    {t.kind === "section" && (
+                      <ol className="mt-3 space-y-3 border-l border-sea/30 pl-4">
+                        {t.points.map((p) => (
+                          <li key={p.title} className="relative">
+                            <span className="absolute -left-[18px] top-1.5 h-1.5 w-1.5 rounded-full bg-sea" />
+                            <p className="font-serif text-base text-deep">{p.title}</p>
+                          </li>
+                        ))}
+                      </ol>
+                    )}
+                  </li>
+                ))}
+              </ol>
+              <p className="font-mono text-xs text-sea pl-5">{CONFIG.currentYear}</p>
+            </div>
           </section>
 
           {/* --- 3. The wall --- */}
