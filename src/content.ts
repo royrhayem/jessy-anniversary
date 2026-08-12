@@ -11,7 +11,7 @@
 export type GiftKind = "digital" | "physical";
 
 export interface RedemptionGift {
-  key: "spa" | "physical-one" | "physical-two";
+  key: "spa" | "physical";
   kind: GiftKind;
   label: string;
   title: string;
@@ -52,33 +52,24 @@ export const CONFIG = {
   spaVoucherUrl: "/spa-voucher.pdf" as string | null,
 } as const;
 
-/** Copy and hiding places for the three-part ending. Update these on the day. */
+/** Copy and hiding place for the two-step ending. Update these on the day. */
 export const REDEMPTION_GIFTS = [
   {
     key: "spa",
     kind: "digital",
-    label: "REVEAL / 01",
-    title: "Step one: open the mystery file",
-    teaser: "The first delivery is ready. Small, suspiciously deserved, and definitely not cash.",
-    clue: "Scan the evidence. Then book an afternoon where nobody can find you.",
+    label: "A LITTLE SOMETHING",
+    title: "A small surprise is ready.",
+    teaser: "It has made its way through the system and passed absolutely no compliance review.",
+    clue: "Open what is waiting, then make a little time for yourself.",
   },
   {
-    key: "physical-one",
+    key: "physical",
     kind: "physical",
-    label: "PHYSICAL / 02",
-    title: "The one that refused to be an app",
-    teaser: "A real object, hidden in the real world. Extremely inconvenient.",
-    clue: "Where the things you make begin.",
-    location: "The kitchen — top shelf, behind the mugs.",
-  },
-  {
-    key: "physical-two",
-    kind: "physical",
-    label: "PHYSICAL / 03",
-    title: "The final boss of appreciation",
-    teaser: "One last side quest. Please leave the screen to collect it.",
-    clue: "Where abandoned cables, big ideas, and suspiciously nice things gather.",
-    location: "TODO: set the hiding place for physical gift #2.",
+    label: "MORE TO UNCOVER",
+    title: "The trail continues.",
+    teaser: "This part leads away from the screen. Follow the clue and see where it takes you.",
+    clue: "Where it all started.",
+    location: "Jessy's old office, the old devices QA room.",
   },
 ] as const satisfies readonly RedemptionGift[];
 

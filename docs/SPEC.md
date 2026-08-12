@@ -190,7 +190,7 @@ paper, sea, soap. The team's real words. Ten years, and then the gift.
      BUG-9002         "Needs money to stop working" → WONTFIX
      BUG-0001         ← cannot be closed
 /tribute              The wall — team messages, photos, 10-year timeline
-/gift                 Three-gift delivery — spa QR + two physical hunts
+/gift                 Surprise trail — reveal something, then follow the clue
 /spa-voucher.pdf      Supplied Skin Avenue voucher opened by the first QR
 /voucher/spa          Styled fallback voucher preview
 /keepsake             Shareable card, "Certificate of 10 Years of Finding What
@@ -373,29 +373,32 @@ Full-bleed vertical scroll, warm palette, paper texture. Sections:
    in as she scrolls. *This is where every quote you collect lives.*
 4. **The line** — one full screen, one sentence, no ornament.
 
-### 6.8 `/gift` — The Three-Gift Delivery
+### 6.8 `/gift` — The Surprise Trail
 ```
 ┌─────────────────────────────┐
 │                             │
-│   REWARD RECOVERY           │
-│   01  SPA RESET   02  🔒    │  Three-step progress rail
-│   03  🔒                    │
+│   FINAL CHECKPOINT          │
+│   A LITTLE SOMETHING        │  Surprise trail
+│   MORE TO UNCOVER           │
 │                             │
-│   Three gifts.              │
-│   One slightly unnecessary  │
+│   A little something.       │
+│   And there's more to       │
+│   uncover.                  │
+│                             │
+│   A mildly unnecessary      │
 │   quest.                    │
 │                             │
-│   [ OPEN THE EVIDENCE ]     │  Digital gift: local QR → voucher
+│   [ OPEN THE MYSTERY ]      │  First reveal: local QR → voucher
 │                             │
-│   [ REVEAL THE CLUE ]       │  Physical gifts: clue → location
+│   [ CONTINUE THE TRAIL ]    │  Later reveal: clue → real-world location
 │                             │
-│   ○ ○  ○   ○ ○  ○  ○ ○      │  Soap bubbles on every claim
+│   ○ ○  ○   ○ ○  ○  ○ ○      │  Soap bubbles on every reveal
 └─────────────────────────────┘
 ```
 The first step renders a scannable QR that opens the supplied `/spa-voucher.pdf`
 by default (or `CONFIG.spaVoucherUrl` if a different voucher URL is needed).
-Steps two and three each reveal a clue, then the physical hiding place. Gift
-progress persists locally so a dropped tab does not reset the scavenger hunt.
+The later reveal opens a clue, then a real-world location. Progress persists
+locally so a dropped tab does not reset the trail.
 
 ---
 
@@ -582,7 +585,7 @@ bar of soap, a card, a small object — so there's a moment where she walks
 somewhere and finds a thing. A screen alone can't end a ten-minute story.
 
 **Mixed mode (recommended):** the site reveals a location; at that location she
-finds the physical gift *and* a second QR that opens `/keepsake` — the certificate
+finds what was waiting *and* a second QR that opens `/keepsake` — the certificate
 she can keep. That's the strongest ending and costs one extra printout.
 
 ---
@@ -686,8 +689,8 @@ file.
 | **T-5 days** | Teammate quotes collected → `content.ts`. Photos in. |
 | **T-3 days** | AI images generated and placed. Full run-through on a real iPhone. |
 | **T-2 days** | **Test on Jessy's actual phone model**, on office wifi, at the actual spot she'll stand. Battery, brightness, notifications. |
-| **T-1 day** | Freeze. Print the 4 team-code digits. Hide the gift. Brief the 4 digit-holders. |
-| **T-1 day** | Set both physical hiding places + spa voucher copy in `content.ts`, redeploy, verify. |
+| **T-1 day** | Freeze. Print the 4 team-code digits. Hide the gifts. Brief the 4 digit-holders. |
+| **T-1 day** | Set the physical hiding place + spa voucher copy in `content.ts`, redeploy, verify. |
 | **Day of** | Organizer opens `/_presenter` on their own phone as a safety net. |
 | **Day of** | **Backup:** the whole flow works on a second phone, pre-loaded, in your pocket. |
 | **T+1 day** | Optionally swap `/` to redirect straight to `/keepsake` so she can re-share it. |
