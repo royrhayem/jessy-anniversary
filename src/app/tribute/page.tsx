@@ -135,7 +135,7 @@ export default function Tribute() {
                     <Placeholder
                       src={t.photo}
                       label={`${t.name} — photo`}
-                      className="portrait w-14 shrink-0"
+                      className="portrait team-portrait w-14 shrink-0"
                     />
                     <figcaption>
                       <p className="font-serif text-lg text-deep leading-none">

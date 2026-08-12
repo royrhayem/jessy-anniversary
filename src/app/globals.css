@@ -119,6 +119,11 @@ body {
   box-shadow: 0 0 0 3px var(--color-sand), 0 0 0 5px var(--color-terracotta);
 }
 
+/* Team photos in the messages section should keep their natural colors. */
+.team-portrait {
+  filter: none;
+}
+
 .stamp {
   font-family: var(--font-mono);
   letter-spacing: 0.08em;
