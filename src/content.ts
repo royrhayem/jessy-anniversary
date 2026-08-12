@@ -245,8 +245,8 @@ export const TRIBUTES: Tribute[] = [
     role: "Developer", // the youngest of the team
     photo: "/photos/team/nathalie.jpg",
     message:
-      "Badde ebke :') " +
-      "Happy anniversary!",
+      "For taking care of Mobile Hospital as one of your own, " +
+      "thank you for everything you do. Happy anniversary!",
   },
   {
     name: "Raja",
@@ -284,12 +284,12 @@ export const TIMELINE: TimelineEntry[] = [
 
 /** One screen. One sentence. No ornament. Make this one count. */
 export const THE_LINE =
-  "For ten years you found the things nobody else would have found — " +
-  "at work, and at home, on no sleep at all. Thank you.";
+  "For ten years, you found the things nobody else would have found — " +
+  "at work, at home, with no sleep at all. Thank you.";
 
 export const KEEPSAKE = {
   title: "Certificate of Ten Years",
-  subtitle: "of finding what everyone else missed",
+  subtitle: "for finding what everyone else missed",
   awardedTo: "Jessy",
   signoff: "— your team", // TODO
 };
