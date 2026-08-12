@@ -5,23 +5,22 @@ import Link from "next/link";
 import { CONFIG, STATS, THE_LINE, TIMELINE, TRIBUTES } from "@/content";
 import Placeholder from "@/components/Placeholder";
 
-/** The B→C transition: a water ripple wipe, tied to the beach. */
-function Ripple({ onDone }: { onDone: () => void }) {
+/** The B→C transition: a quick fade from the debug dark to the paper page. */
+function Fade({ onDone }: { onDone: () => void }) {
   useEffect(() => {
-    const t = setTimeout(onDone, 1400);
+    const t = setTimeout(onDone, 500);
     return () => clearTimeout(t);
   }, [onDone]);
   return (
-    <div className="fixed inset-0 z-50 bg-dbg-bg grid place-items-center pointer-events-none">
-      <div className="rounded-full bg-sand animate-[ripple_1.4s_ease-out_forwards]" />
+    <div className="fixed inset-0 z-50 bg-dbg-bg pointer-events-none animate-[fadeOut_.5s_ease-out_forwards]">
       <style>{`
-        @keyframes ripple {
-          from { width: 0; height: 0; opacity: 1; }
-          to   { width: 300vmax; height: 300vmax; opacity: 1; }
+        @keyframes fadeOut {
+          from { opacity: 1; }
+          to   { opacity: 0; }
         }
         @media (prefers-reduced-motion: reduce) {
-          .animate-\\[ripple_1\\.4s_ease-out_forwards\\] {
-            width: 300vmax; height: 300vmax;
+          .animate-\\[fadeOut_\\.5s_ease-out_forwards\\] {
+            opacity: 0;
           }
         }
       `}</style>
@@ -75,11 +74,11 @@ function Counter({
 }
 
 export default function Tribute() {
-  const [wiping, setWiping] = useState(true);
+  const [fading, setFading] = useState(true);
 
   return (
     <>
-      {wiping && <Ripple onDone={() => setWiping(false)} />}
+      {fading && <Fade onDone={() => setFading(false)} />}
 
       <main className="hand paper min-h-dvh relative">
         <div className="relative z-2 px-6 py-16 max-w-lg mx-auto space-y-24">
