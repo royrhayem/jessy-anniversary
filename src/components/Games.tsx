@@ -166,12 +166,21 @@ function Sleep({ solved, onSolve, resolution }: GameProps) {
       {/* The stream steps aside here — this beat is just the screenshot. */}
       {phase === "ask" || phase === "thinking" ? (
         <div className="animate-[fadeUp_.3s_ease-out]">
-          <Placeholder
-            src={SLEEP_ASSIST.ask.image}
-            label={SLEEP_ASSIST.ask.imageLabel}
-            fit="contain"
-            className="w-full mx-auto min-h-20 rounded border border-dbg-line bg-black"
-          />
+          {/* The wrapper cancels the card's own p-4 so the screenshot spans
+              the card edge to edge, and stops there — it stays inside the
+              card's border instead of escaping the panel. The width comes
+              from the wrapper being a plain block box: auto width plus the
+              negative margins resolves to exactly the padded width + 32px,
+              with no arbitrary value to depend on. `bleed` only lifts the
+              global max-width cap that would otherwise clamp it back. */}
+          <div className="bleed -mx-4">
+            <Placeholder
+              src={SLEEP_ASSIST.ask.image}
+              label={SLEEP_ASSIST.ask.imageLabel}
+              fit="contain"
+              className="w-full min-h-20 border-y border-dbg-line bg-black"
+            />
+          </div>
 
           <div className="h-16 grid place-items-center">
             {phase === "ask" ? (

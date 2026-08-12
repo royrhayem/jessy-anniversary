@@ -49,6 +49,15 @@ body {
   max-width: 100%;
 }
 
+/* The one deliberate exception: a block that must widen past the padding it
+   sits in. Tailwind's `max-w-none` cannot do this on its own — it lives in
+   @layer utilities, and the unlayered rule above beats any layered rule
+   regardless of specificity. Pair it with a negative margin, and keep the
+   result inside the viewport so the no-sideways-scroll rule still holds. */
+.bleed {
+  max-width: none;
+}
+
 /* ---------- Layer A ---------- */
 .corp {
   background: var(--color-corp-bg);
