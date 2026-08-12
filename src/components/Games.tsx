@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { BLACKSCREEN, SLEEP_ASSIST, TABBOULEH, type GameKind } from "@/content";
+import { useEffect, useRef, useState } from "react";
+import { BLACKSCREEN, FAVORITE, SLEEP_ASSIST, TABBOULEH, type GameKind } from "@/content";
 import { haptic } from "@/lib/progress";
 import Placeholder from "./Placeholder";
 
@@ -27,6 +27,7 @@ export default function Game({
     case "sleep": return <Sleep {...props} />;
     case "tabouleh": return <Tabouleh {...props} />;
     case "blackscreen": return <BlackScreen {...props} />;
+    case "favorite": return <Favorite {...props} />;
     case "final": return <Final {...props} />;
   }
 }
@@ -394,8 +395,27 @@ const BS_MS: Record<Exclude<BSPhase, "idle" | "crashed">, number> = {
   sean: BLACKSCREEN.sean.ms,
 };
 
+/** One support agent's contribution to not solving anything. */
+function AgentNote({
+  agent,
+}: {
+  agent: { name: string; role: string; text: string };
+}) {
+  return (
+    <div className="rounded border border-dbg-line bg-dbg-panel p-3 animate-[fadeUp_.25s_ease-out]">
+      <p className="font-mono text-[11px] text-dbg-purple">
+        {agent.name} <span className="text-dbg-muted">· {agent.role}</span>
+      </p>
+      <p className="mt-1.5 text-sm leading-relaxed text-dbg-text/90">
+        {agent.text}
+      </p>
+    </div>
+  );
+}
+
 function BlackScreen({ solved, onSolve, resolution }: GameProps) {
   const [phase, setPhase] = useState<BSPhase>("idle");
+  const end = useRef<HTMLDivElement>(null);
 
   // Every beat but the first and last advances on its own.
   useEffect(() => {
@@ -413,27 +433,14 @@ function BlackScreen({ solved, onSolve, resolution }: GameProps) {
     onSolve();
   }, [phase, solved, onSolve]);
 
-  if (solved || phase === "crashed") {
-    return (
-      <div className={`${panel} min-h-52 justify-center`}>
-        <span className="text-4xl">💥</span>
-        <p className="text-dbg-red font-mono font-bold text-xl text-center animate-[fadeUp_.3s_ease-out]">
-          {BLACKSCREEN.crashed}
-        </p>
-        {resolution && (
-          <span className="stamp text-dbg-green text-sm mt-1">{resolution}</span>
-        )}
-        <style>{`
-          @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(8px); }
-            to   { opacity: 1; transform: none; }
-          }
-        `}</style>
-      </div>
-    );
-  }
+  // The thread grows downward — keep the newest line on screen without
+  // yanking the page when it is already visible.
+  useEffect(() => {
+    if (phase === "idle") return;
+    end.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [phase]);
 
-  if (phase === "idle") {
+  if (phase === "idle" && !solved) {
     return (
       <div className={`${panel} min-h-52 justify-center`}>
         <span className="text-5xl">🎫</span>
@@ -450,32 +457,44 @@ function BlackScreen({ solved, onSolve, resolution }: GameProps) {
     );
   }
 
-  const agent = phase === "kevin" ? BLACKSCREEN.kevin : phase === "sean" ? BLACKSCREEN.sean : null;
+  // Auto-solve can force `solved` at any point — show the whole thread.
+  const step = solved ? BS_PHASES.length - 1 : BS_PHASES.indexOf(phase);
+  const shown = (p: BSPhase) => step >= BS_PHASES.indexOf(p);
 
   return (
-    <div className={`${panel} min-h-52 justify-center`}>
-      {phase === "field" && (
-        <p className="text-dbg-amber font-mono text-sm text-center leading-relaxed animate-[fadeUp_.3s_ease-out]">
-          {BLACKSCREEN.field.text}
-        </p>
-      )}
-
-      {phase === "escalate" && (
-        <p className="text-dbg-muted font-mono text-xs text-center animate-pulse">
-          {BLACKSCREEN.escalate.text}
-        </p>
-      )}
-
-      {agent && (
-        <div className="w-full flex flex-col items-center gap-2 animate-[fadeUp_.3s_ease-out]">
-          <p className="font-mono text-xs text-dbg-purple">
-            {agent.name} · {agent.role}
-          </p>
-          <p className="text-sm text-center leading-relaxed text-dbg-text/90">
-            {agent.text}
+    <div className="rounded-md border border-dbg-line bg-dbg-bg p-4 flex flex-col gap-3">
+      {shown("field") && (
+        <div className="animate-[fadeUp_.25s_ease-out]">
+          <p className="text-[10px] font-mono text-dbg-muted mb-1">FIELD ISSUE</p>
+          <p className="text-dbg-amber font-mono text-sm leading-relaxed">
+            {BLACKSCREEN.field.text}
           </p>
         </div>
       )}
+
+      {shown("kevin") && <AgentNote agent={BLACKSCREEN.kevin} />}
+
+      {shown("escalate") && (
+        <p className="text-[11px] font-mono text-dbg-muted text-center animate-[fadeUp_.25s_ease-out]">
+          ↓ {BLACKSCREEN.escalate.text}
+        </p>
+      )}
+
+      {shown("sean") && <AgentNote agent={BLACKSCREEN.sean} />}
+
+      {shown("crashed") && (
+        <div className="flex flex-col items-center gap-3 pt-2 animate-[fadeUp_.25s_ease-out]">
+          <span className="text-3xl">💥</span>
+          <p className="text-dbg-red font-mono font-bold text-xl text-center">
+            {BLACKSCREEN.crashed}
+          </p>
+          {resolution && (
+            <span className="stamp text-dbg-green text-sm">{resolution}</span>
+          )}
+        </div>
+      )}
+
+      <div ref={end} />
 
       <style>{`
         @keyframes fadeUp {
@@ -483,6 +502,88 @@ function BlackScreen({ solved, onSolve, resolution }: GameProps) {
           to   { opacity: 1; transform: none; }
         }
       `}</style>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------
+ *  BUG-4141 — Favorite coworker. Everyone dodges the tap except one.
+ * ---------------------------------------------------------------------- */
+function Favorite({ solved, onSolve, resolution }: GameProps) {
+  const [pos, setPos] = useState<Record<string, { x: number; y: number }>>({});
+  const [picked, setPicked] = useState(false);
+
+  function dodge(name: string) {
+    haptic(6);
+    setPos((p) => ({
+      ...p,
+      [name]: { x: (Math.random() - 0.5) * 170, y: (Math.random() - 0.5) * 70 },
+    }));
+  }
+
+  function choose(name: string) {
+    if (name === FAVORITE.correct) {
+      haptic([30, 60, 30]);
+      setPicked(true);
+    } else {
+      dodge(name);
+    }
+  }
+
+  // A short beat on her own choice before the room reacts.
+  useEffect(() => {
+    if (!picked || solved) return;
+    const t = setTimeout(onSolve, 1000);
+    return () => clearTimeout(t);
+  }, [picked, solved, onSolve]);
+
+  if (solved || picked) {
+    return (
+      <div className={`${panel} min-h-52 justify-center`}>
+        <p
+          dir="rtl"
+          className="text-2xl font-mono text-center animate-[fadeUp_.3s_ease-out]"
+        >
+          {FAVORITE.verdict.arabic}
+        </p>
+        <p className="text-dbg-amber font-mono text-base text-center leading-relaxed">
+          {FAVORITE.verdict.latin}
+        </p>
+        {resolution && (
+          <span className="stamp text-dbg-green text-sm mt-1">{resolution}</span>
+        )}
+        <style>{`
+          @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: none; }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`${panel} min-h-56 justify-center`}>
+      <p className="text-xs text-dbg-muted font-mono text-center">
+        pick your favorite coworker
+      </p>
+
+      <div className="flex flex-wrap justify-center gap-3 w-full py-4">
+        {FAVORITE.coworkers.map((name) => {
+          const p = pos[name] ?? { x: 0, y: 0 };
+          return (
+            <button
+              key={name}
+              onPointerEnter={() => name !== FAVORITE.correct && dodge(name)}
+              onClick={() => choose(name)}
+              style={{ transform: `translate(${p.x}px, ${p.y}px)` }}
+              className="border-2 border-dbg-line rounded-full px-4 py-2.5 min-h-11 font-mono text-sm transition-transform duration-200 active:border-dbg-green"
+            >
+              {name}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }

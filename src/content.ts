@@ -100,9 +100,9 @@ export const BALANCES = [
  *  ACT II — the bug board
  * ------------------------------------------------------------------------- */
 
-export type TicketId = "BUG-1042" | "BUG-3011" | "BUG-6001" | "BUG-0001";
+export type TicketId = "BUG-1042" | "BUG-3011" | "BUG-6001" | "BUG-4141" | "BUG-0001";
 
-export type GameKind = "sleep" | "tabouleh" | "blackscreen" | "final";
+export type GameKind = "sleep" | "tabouleh" | "blackscreen" | "favorite" | "final";
 
 /** The finale. Stays locked until every other ticket on the board is closed. */
 export const FINAL_TICKET_ID = "BUG-0001" satisfies TicketId;
@@ -150,6 +150,14 @@ export const TICKETS: Ticket[] = [
     title: "Black screen l mawtttttttt",
     severity: "CRITICAL",
     game: "blackscreen",
+    resolution: "WONTFIX",
+    stampInGame: true,
+  },
+  {
+    id: "BUG-4141",
+    title: "FAVORITE COWORKER NOT FOUND",
+    severity: "CRITICAL",
+    game: "favorite",
     resolution: "WONTFIX",
     stampInGame: true,
   },
@@ -219,17 +227,33 @@ export const BLACKSCREEN = {
   kevin: {
     name: "KEVIN BRADLEY",
     role: "Tier 1 Support",
-    text: "\"Reproduced. Screen: black. Rebooted the user's router just in case. Definitely a hardware issue.\"",
+    text:
+      "\"Tried to disconnect and reconnect the smart reader, but the issue " +
+      "is still happening.\"",
     ms: 3200,
   },
   escalate: { text: "Escalating to SEAN O TAWIL…", ms: 1400 },
   sean: {
     name: "SEAN O TAWIL",
     role: "Tier 2 Support",
-    text: "\"Reviewed Kevin's findings. Solar flare, most likely. Escalating to nobody.\"",
-    ms: 3200,
+    text: "\"How does mobile hospital even work ?\"",
+    ms: 3000,
   },
   crashed: "Jessy crashed",
+} as const;
+
+/**
+ * BUG-4141 — pick a favorite coworker. Everyone dodges the tap except one —
+ * the one answer she'd never actually give out loud.
+ */
+export const FAVORITE = {
+  /** Order shown on screen. The last name is the only one that holds still. */
+  coworkers: ["Roy", "Nathalie", "Hadil", "Raja", "Priyal"],
+  correct: "Priyal",
+  verdict: {
+    arabic: "سكين الغدر 🔪",
+    latin: "Kenna 3erfin bethebiya aktar menaaa",
+  },
 } as const;
 
 /* ---------------------------------------------------------------------------
