@@ -53,6 +53,6 @@ export default function Placeholder({
 
 /** Warmed during the landing spinner so nothing waits on office wifi later. */
 export const PLACEHOLDER_IMAGES = [
-  "/corporate-hero.jpg",
+  "/corporate-hero.jpeg",
   "/chatgpt-sleep.png",
 ];

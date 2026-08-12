@@ -767,7 +767,7 @@ Generate these and drop them in `/public`. Each is written to be pasted directly
 into an image model.
 
 ### Act I — Corporate (deliberately generic)
-1. **`/corporate-hero.jpg`** — *"Stock photograph, four diverse business
+1. **`/corporate-hero.jpeg`** — *"Stock photograph, four diverse business
    colleagues in business-casual clothing high-fiving in a bright glass-walled
    conference room, over-lit, slightly cheesy corporate stock photo aesthetic,
    shallow depth of field, generic office plant in background, 2015 stock
