@@ -261,8 +261,9 @@ export const TRIBUTES: Tribute[] = [
     role: "Developer",
     photo: "/photos/team/roy.jpg",
     message:
-      "From 1 yearS to 10 years.. " +
-      "Happy anniversary!",
+      "For multiple year, you haven’t allowed even 1 bugs to slip past 1 fingers " +
+      "of yours, not even 1 pixels, 1 unnecessary S’s, 1 expired items, or 1 recalled products. " +
+      "Every single 1 becomes a bug. Happy anniversary to the QA queen who never lets 1 details escapes!",
   },
 ];
 
