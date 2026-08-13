@@ -125,7 +125,15 @@ export default function Tribute() {
                         {t.points.map((p) => (
                           <li key={p.title} className="relative">
                             <span className="absolute -left-[18px] top-1.5 h-1.5 w-1.5 rounded-full bg-sea" />
-                            <p className="font-serif text-base text-deep">{p.title}</p>
+                            <p className="font-serif text-base text-deep">
+                              {p.title}
+                              {p.accent && (
+                                <>
+                                  {" "}
+                                  <span className="text-pink-600">{p.accent}</span>
+                                </>
+                              )}
+                            </p>
                           </li>
                         ))}
                       </ol>

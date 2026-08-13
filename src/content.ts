@@ -345,6 +345,7 @@ export const TRIBUTES: Tribute[] = [
 
 export interface TimelinePoint {
   title: string;
+  accent?: string;
 }
 
 /**
@@ -373,6 +374,7 @@ export const TIMELINE: TimelineEntry[] = [
     kind: "section",
     title: "Mobile Hospital transition",
     points: [
+      { title: "Turned the mobility room", accent: "Pink" },
       { title: "0 EPR" },
       { title: "Carrying iOS and Android Mobile Hospital testing alone" },
       { title: "Catalon automation" },
