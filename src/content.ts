@@ -311,8 +311,9 @@ export const TRIBUTES: Tribute[] = [
     role: "Developer", // works from Cyprus
     photo: "/photos/team/hadil.jpg",
     message:
-      "Miss Pixel " +
-      "Happy anniversary, Jessy!",
+      "Cheers to exploring the hopefully known unknown, one pixel at a time, " +
+      "within different timezones, using user J and user R together and no black screens.\n" +
+      "Happy 10 Year(s)",
     remote: true,
   },
   {
